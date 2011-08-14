@@ -10,7 +10,7 @@
  * SECTION:notify
  * @title: basic API funcs
  * @short_description: basic API offered by libtinynotify
- * @include: tinynotify.h
+ * @include: libnotify/notify.h
  *
  * libtinynotify provides a simple and lightweight implementation of Desktop
  * Notification Specification. It tries to keep an API compatible with

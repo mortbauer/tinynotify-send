@@ -10,7 +10,7 @@
  * SECTION:notification
  * @title: notification API
  * @short_description: API providing means to create & display notifications
- * @include: tinynotify.h
+ * @include: libnotify/notify.h
  *
  * This part of the API provides functions to create, modify and display
  * notifications. It tries to emulate libnotify but that's not entirely
