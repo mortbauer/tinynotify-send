@@ -1,4 +1,4 @@
-#include "tinynotify.h"
+#include "notify.h"
 
 #include <stdio.h>
 
