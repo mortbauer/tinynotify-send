@@ -7,9 +7,10 @@ AM_INIT_AUTOMAKE([1.6 foreign dist-bzip2 no-dependencies -Wall])
 AC_PROG_CC
 AC_USE_SYSTEM_EXTENSIONS
 LT_INIT([disable-static])
+GTK_DOC_CHECK([1.15])
 
 PKG_CHECK_MODULES([DBUS], [dbus-1])
 
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile doc/Makefile])
 AC_OUTPUT

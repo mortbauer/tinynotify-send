@@ -11,6 +11,8 @@ Makefile.in
 /config.h
 /config.status
 /config.log
+/doc/
+/gtk-doc.make
 /libtool
 /m4/
 /stamp-h1
