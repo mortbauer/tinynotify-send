@@ -1,0 +1,14 @@
+	libtinynotify
+	(c) 2011 Michał Górny
+	2-clause BSD-licensed
+
+Introduction
+------------
+
+libtinynotify is an alternate implementation of the Desktop Notification
+Specification. It aims to be simple and lightweight and thus suitable for a few
+specific areas where [libnotify] [1] just doesn't fit.
+
+[1]:http://www.galago-project.org/
+
+<!-- vim:se syn=markdown :-->
