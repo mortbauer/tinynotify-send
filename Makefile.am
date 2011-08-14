@@ -3,10 +3,13 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
 SUBDIRS = doc
 
+pkgconfigdir = $(libdir)/pkgconfig
 subincludedir = $(includedir)/tinynotify/libnotify
 
 noinst_PROGRAMS = test
+
 lib_LTLIBRARIES = libtinynotify.la
+pkgconfig_DATA = libtinynotify.pc
 subinclude_HEADERS = lib/notify.h
 
 libtinynotify_la_LDFLAGS = -version-info 0:0:0

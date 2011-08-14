@@ -18,3 +18,4 @@ Makefile.in
 /m4/
 /stamp-h1
 *.la
+*.pc

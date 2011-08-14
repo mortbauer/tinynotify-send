@@ -13,5 +13,5 @@ GTK_DOC_CHECK([1.15])
 PKG_CHECK_MODULES([DBUS], [dbus-1])
 
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_FILES([Makefile doc/Makefile])
+AC_CONFIG_FILES([Makefile doc/Makefile libtinynotify.pc])
 AC_OUTPUT
