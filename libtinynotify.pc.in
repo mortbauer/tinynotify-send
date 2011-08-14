@@ -8,4 +8,4 @@ Description: A lightweight implementation of Desktop Notification Spec
 Version: @VERSION@
 Requires.private: dbus-1
 Libs: -L${libdir} -ltinynotify
-Cflags: -I${includedir}/tinynotify
+Cflags: -I${includedir}

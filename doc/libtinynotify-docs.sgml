@@ -12,8 +12,7 @@
 
 	<chapter>
 		<title>API reference</title>
-		<xi:include href="xml/notify.xml"/>
-		<xi:include href="xml/notification.xml"/>
+		<xi:include href="xml/tinynotify.xml"/>
 	</chapter>
 
 	<index id="api-index-full">

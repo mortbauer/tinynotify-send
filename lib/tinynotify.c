@@ -5,8 +5,4 @@
 
 #include "config.h"
 
-#include <stdlib.h>
-
-#include <dbus/dbus.h>
-
-#include "notification.h"
+#include "tinynotify.h"
