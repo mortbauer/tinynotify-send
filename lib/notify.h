@@ -7,8 +7,8 @@
 #define _LIBNOTIFY_NOTIFY_H_
 
 /**
- * SECTION:tinynotify
- * @title: libtinynotify API
+ * SECTION:notify
+ * @title: basic API funcs
  * @short_description: basic API offered by libtinynotify
  * @include: tinynotify.h
  *
