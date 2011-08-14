@@ -5,6 +5,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.6 foreign dist-bzip2 no-dependencies -Wall])
 
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_USE_SYSTEM_EXTENSIONS
 LT_INIT([disable-static])
 GTK_DOC_CHECK([1.15])
