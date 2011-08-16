@@ -173,6 +173,19 @@ NotifyError notify_session_connect(NotifySession session);
 void notify_session_set_app_name(NotifySession session, const char* app_name);
 
 /**
+ * notify_session_set_app_icon
+ * @session: session to operate on
+ * @app_icon: a new icon name or #NULL
+ *
+ * Set the default application icon for notifications sent through this
+ * session.
+ *
+ * If #NULL is passed, the default application icon will be cleared. Otherwise,
+ * the given string will be copied to #NotifySession.
+ */
+void notify_session_set_app_icon(NotifySession session, const char* app_icon);
+
+/**
  * SECTION: notification
  * @short_description: API to deal with a single notification
  * @include: tinynotify.h

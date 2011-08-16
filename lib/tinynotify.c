@@ -16,6 +16,7 @@ struct _tinynotify_notify_session {
 	DBusConnection *conn;
 
 	char* app_name;
+	char* app_icon;
 
 	NotifyError error;
 	char* error_details;
@@ -27,12 +28,18 @@ NotifySession notify_session_new(void) {
 	assert(ret = malloc(sizeof(*ret)));
 	ret->conn = NULL;
 	ret->app_name = NULL;
+	ret->app_icon = NULL;
 	ret->error = NOTIFY_ERROR_NO_ERROR;
 	return ret;
 }
 
 void notify_session_free(NotifySession session) {
+	struct _tinynotify_notify_session *s = session;
+
 	notify_session_disconnect(session);
+
+	free(s->app_name);
+	free(s->app_icon);
 	free(session);
 }
 
@@ -103,6 +110,17 @@ void notify_session_set_app_name(NotifySession session, const char* app_name) {
 		assert(s->app_name = strdup(app_name));
 	else
 		s->app_name = NULL;
+}
+
+void notify_session_set_app_icon(NotifySession session, const char* app_icon) {
+	struct _tinynotify_notify_session *s = session;
+
+	if (s->app_icon)
+		free(s->app_icon);
+	if (app_icon)
+		assert(s->app_icon = strdup(app_icon));
+	else
+		s->app_icon = NULL;
 }
 
 struct _tinynotify_notification {

@@ -6,6 +6,7 @@ notify_session_free
 notify_session_connect
 notify_session_disconnect
 notify_session_set_app_name
+notify_session_set_app_icon
 </SECTION>
 <SECTION>
 <FILE>error</FILE>
