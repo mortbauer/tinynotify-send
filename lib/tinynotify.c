@@ -36,6 +36,14 @@ void notify_session_free(NotifySession session) {
 	free(session);
 }
 
+static NotifyError _notify_session_set_error(
+		struct _tinynotify_notify_session *s,
+		NotifyError new_error)
+{
+	s->error = new_error;
+	return new_error;
+}
+
 NotifyError notify_session_get_error(NotifySession session) {
 	struct _tinynotify_notify_session *s = session;
 
@@ -63,9 +71,11 @@ NotifyError notify_session_connect(NotifySession session) {
 	assert(!s->conn == dbus_error_is_set(&err));
 	if (!s->conn) {
 		s->conn = NULL;
-		s->error = NOTIFY_ERROR_DBUS_CONNECT;
 		/* XXX: copy error message */
 		dbus_error_free(&err);
+		return _notify_session_set_error(s, NOTIFY_ERROR_DBUS_CONNECT);
 	} else
 		dbus_connection_set_exit_on_disconnect(s->conn, FALSE);
+
+	return _notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
 }
