@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 int main(void) {
-#if 0
-	printf("notify_init() -> %d\n", notify_init("foo"));
-	notify_uninit();
-#endif
+	NotifySession s;
+
+	s = notify_session_new();
+	notify_session_free(s);
 
 	return 0;
 }
