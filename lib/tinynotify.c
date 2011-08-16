@@ -63,7 +63,7 @@ NotifyError notify_session_connect(NotifySession session) {
 		DBusError err;
 
 		dbus_error_init(&err);
-		s->conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+		s->conn = dbus_bus_get_private(DBUS_BUS_SESSION, &err);
 
 		assert(!s->conn == dbus_error_is_set(&err));
 		if (!s->conn) {
@@ -82,6 +82,7 @@ void notify_session_disconnect(NotifySession session) {
 	struct _tinynotify_notify_session *s = session;
 
 	if (s->conn) {
+		dbus_connection_close(s->conn);
 		dbus_connection_unref(s->conn);
 		s->conn = NULL;
 	}
