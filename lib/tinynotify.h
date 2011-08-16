@@ -40,6 +40,30 @@ typedef void* NotifySession;
 /**
  * SECTION: error
  * @short_description: API to deal with libtinynotify errors
+ * @include: tinynotify.h
+ *
+ * All actual error handling in libtinynotify is done within the bounds of
+ * a #NotifySession. Each of the libtinynotify functions (except for
+ * notify_session_new(), notify_session_free() and error grabbing funcs) store
+ * their results and any additional error details in the corresponding
+ * #NotifySession.
+ *
+ * After a call to such a function, one may get its error status using
+ * notify_session_get_error(). If a function returns #NotifyError, then it is
+ * guaranteed that the return value is equal to the result of calling
+ * notify_session_get_error() immediately after the function.
+ *
+ * One may assume that #NOTIFY_ERROR_NO_ERROR will always evaluate to false.
+ * Thus, #NotifyError can be used as a boolean result as well.
+ *
+ * A more detailed error description can be obtained using
+ * notify_session_get_error_message(). It can contain additional details not
+ * available via #NotifyError like backend error messages.
+ *
+ * The libtinynotify functions don't check for existing error conditions. It is
+ * unnecessary to reset the error within #NotifySession (and thus there is no
+ * function implementing such a thing). Calling another function will implicitly
+ * reset the current error status, and replace with its own result.
  */
 
 /**
