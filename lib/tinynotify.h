@@ -32,7 +32,8 @@ NotifySession notify_session_new(void);
  * notify_session_free
  * @session: the session to free
  *
- * Free a libtinynotify session.
+ * Free a libtinynotify session. This handles disconnecting and other cleanup
+ * as well.
  */
 void notify_session_free(NotifySession session);
 

@@ -10,12 +10,14 @@
 #include <assert.h>
 
 struct _tinynotify_notify_session {
+	int connected;
 };
 
 NotifySession notify_session_new(void) {
 	struct _tinynotify_notify_session *ret;
 
 	assert(ret = malloc(sizeof(*ret)));
+	ret->connected = 0;
 	return ret;
 }
 
