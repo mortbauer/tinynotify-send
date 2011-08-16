@@ -19,4 +19,5 @@ notify_session_get_error_message
 Notification
 notification_new
 notification_free
+notification_send
 </SECTION>

@@ -18,6 +18,8 @@ int main(void) {
 	print_errors(s);
 
 	n = notification_new("foo", "test bar");
+	notification_send(s, n);
+	print_errors(s);
 	notification_free(n);
 
 	notify_session_free(s);

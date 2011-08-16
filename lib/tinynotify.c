@@ -58,7 +58,9 @@ NotifyError notify_session_get_error(NotifySession session) {
 }
 
 static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
-	"No error"
+	"No error",
+	"Connecting to D-Bus failed",
+	"Sending message over D-Bus failed"
 };
 
 const char* notify_session_get_error_message(NotifySession session) {
@@ -151,4 +153,75 @@ void notification_free(Notification notification) {
 	free(n->summary);
 
 	free(notification);
+}
+
+NotifyError notification_send(NotifySession session, Notification notification) {
+	struct _tinynotify_notify_session *s = session;
+	struct _tinynotify_notification *n = notification;
+	NotifyError ret;
+
+	DBusMessage *msg, *reply;
+	DBusMessageIter iter, subiter;
+	DBusError err;
+
+	const char *app_name = s->app_name ? s->app_name : "";
+	dbus_uint32_t replaces_id = 0;
+	const char *app_icon = s->app_icon ? s->app_icon : "";
+	const char *summary = n->summary;
+	const char *body = n->body ? n->body : "";
+	dbus_int32_t expire_timeout = -1;
+
+	if (notify_session_connect(session))
+		return s->error;
+
+	assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
+				"/org/freedesktop/Notifications",
+				"org.freedesktop.Notifications",
+				"Notify"));
+
+	assert(dbus_message_append_args(msg,
+				DBUS_TYPE_STRING, &app_name,
+				DBUS_TYPE_UINT32, &replaces_id,
+				DBUS_TYPE_STRING, &app_icon,
+				DBUS_TYPE_STRING, &summary,
+				DBUS_TYPE_STRING, &body,
+				DBUS_TYPE_INVALID));
+
+	dbus_message_iter_init_append(msg, &iter);
+
+	/* actions */
+	assert(dbus_message_iter_open_container(&iter,
+				DBUS_TYPE_ARRAY, DBUS_TYPE_STRING_AS_STRING, &subiter));
+	assert(dbus_message_iter_close_container(&iter, &subiter));
+
+	/* hints */
+	assert(dbus_message_iter_open_container(&iter,
+				DBUS_TYPE_ARRAY,
+				DBUS_DICT_ENTRY_BEGIN_CHAR_AS_STRING
+				DBUS_TYPE_STRING_AS_STRING
+				DBUS_TYPE_VARIANT_AS_STRING
+				DBUS_DICT_ENTRY_END_CHAR_AS_STRING,
+				&subiter));
+	assert(dbus_message_iter_close_container(&iter, &subiter));
+
+	assert(dbus_message_iter_append_basic(&iter,
+				DBUS_TYPE_INT32, &expire_timeout));
+
+	dbus_error_init(&err);
+	reply = dbus_connection_send_with_reply_and_block(s->conn,
+			msg, 2000 /* XXX */, &err);
+
+	assert(!reply == dbus_error_is_set(&err));
+	if (!reply) {
+		/* XXX: copy error message */
+		dbus_error_free(&err);
+		ret = NOTIFY_ERROR_DBUS_SEND;
+	} else {
+		/* XXX: use reply */
+		dbus_message_unref(reply);
+		ret = NOTIFY_ERROR_NO_ERROR;
+	}
+
+	dbus_message_unref(msg);
+	return _notify_session_set_error(s, ret);
 }

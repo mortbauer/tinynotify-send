@@ -70,6 +70,7 @@ typedef void* NotifySession;
  * NotifyError
  * @NOTIFY_ERROR_NO_ERROR: no error
  * @NOTIFY_ERROR_DBUS_CONNECT: unable to connect to the session bus
+ * @NOTIFY_ERROR_DBUS_SEND: unable to send the notification
  *
  * A tinynotify error code.
  *
@@ -81,6 +82,7 @@ typedef enum {
 	NOTIFY_ERROR_NO_ERROR = 0,
 
 	NOTIFY_ERROR_DBUS_CONNECT,
+	NOTIFY_ERROR_DBUS_SEND,
 
 	/*< private >*/
 	NOTIFY_ERROR_COUNT
@@ -231,5 +233,16 @@ Notification notification_new(const char* summary, const char* body);
  * a #Notification is no longer valid.
  */
 void notification_free(Notification notification);
+
+/**
+ * notification_send
+ * @session: session to send the notification through
+ * @notification: the notification to send
+ *
+ * Send a notification to the notification daemon.
+ *
+ * Returns: a positive #NotifyError or #NOTIFY_ERROR_NO_ERROR
+ */
+NotifyError notification_send(NotifySession session, Notification notification);
 
 #endif
