@@ -20,6 +20,23 @@
 typedef void* NotifySession;
 
 /**
+ * NotifyError
+ * @NOTIFY_ERROR_NO_ERROR: no error
+ *
+ * A tinynotify error code.
+ *
+ * Note that #NOTIFY_ERROR_NO_ERROR is guaranteed to be always 0. Thus, one can
+ * use this enum as a boolean for error indication.
+ */
+
+typedef enum {
+	NOTIFY_ERROR_NO_ERROR = 0,
+
+	/*< private >*/
+	NOTIFY_ERROR_COUNT
+} NotifyError;
+
+/**
  * notify_session_new
  *
  * Create and initialize a new libtinynotify session.
@@ -36,5 +53,25 @@ NotifySession notify_session_new(void);
  * as well.
  */
 void notify_session_free(NotifySession session);
+
+/**
+ * notify_session_get_error
+ * @session: session to operate on
+ *
+ * Get current error for @session.
+ *
+ * Returns: positive #NotifyError or #NOTIFY_ERROR_NO_ERROR if no error
+ */
+NotifyError notify_session_get_error(NotifySession session);
+
+/**
+ * notify_session_get_error_message
+ * @session: session to operate on
+ *
+ * Get detailed error message for @session.
+ *
+ * Returns: a statically allocated or constant string
+ */
+const char* notify_session_get_error_message(NotifySession session);
 
 #endif
