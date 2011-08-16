@@ -9,8 +9,10 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include <dbus/dbus.h>
+
 struct _tinynotify_notify_session {
-	int connected;
+	DBusConnection *conn;
 
 	NotifyError error;
 	char* error_details;
@@ -20,12 +22,17 @@ NotifySession notify_session_new(void) {
 	struct _tinynotify_notify_session *ret;
 
 	assert(ret = malloc(sizeof(*ret)));
-	ret->connected = 0;
+	ret->conn = NULL;
 	ret->error = NOTIFY_ERROR_NO_ERROR;
 	return ret;
 }
 
 void notify_session_free(NotifySession session) {
+	struct _tinynotify_notify_session *s = session;
+
+	if (s->conn)
+		dbus_connection_unref(s->conn);
+
 	free(session);
 }
 
@@ -43,4 +50,22 @@ const char* notify_session_get_error_message(NotifySession session) {
 	struct _tinynotify_notify_session *s = session;
 
 	return _error_messages[s->error];
+}
+
+NotifyError notify_session_connect(NotifySession session) {
+	struct _tinynotify_notify_session *s = session;
+	DBusError err;
+
+	assert(s->conn == NULL);
+	dbus_error_init(&err);
+	s->conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+
+	assert(!s->conn == dbus_error_is_set(&err));
+	if (!s->conn) {
+		s->conn = NULL;
+		s->error = NOTIFY_ERROR_DBUS_CONNECT;
+		/* XXX: copy error message */
+		dbus_error_free(&err);
+	} else
+		dbus_connection_set_exit_on_disconnect(s->conn, FALSE);
 }

@@ -22,6 +22,7 @@ typedef void* NotifySession;
 /**
  * NotifyError
  * @NOTIFY_ERROR_NO_ERROR: no error
+ * @NOTIFY_ERROR_DBUS_CONNECT: unable to connect to the session bus
  *
  * A tinynotify error code.
  *
@@ -31,6 +32,8 @@ typedef void* NotifySession;
 
 typedef enum {
 	NOTIFY_ERROR_NO_ERROR = 0,
+
+	NOTIFY_ERROR_DBUS_CONNECT,
 
 	/*< private >*/
 	NOTIFY_ERROR_COUNT
@@ -73,5 +76,19 @@ NotifyError notify_session_get_error(NotifySession session);
  * Returns: a statically allocated or constant string (not to be freed)
  */
 const char* notify_session_get_error_message(NotifySession session);
+
+/**
+ * notify_session_connect
+ * @session: session to operate on
+ *
+ * Establish a connection to the D-Bus session bus.
+ *
+ * Note that calling this function is not obligatory. If not used,
+ * the connection will be established when sending the first notification.
+ *
+ * Returns: a #NotifyError or #NOTIFY_ERROR_NO_ERROR if connection succeeds.
+ * For additional error details, see notify_session_get_error_message().
+ */
+NotifyError notify_session_connect(NotifySession session);
 
 #endif

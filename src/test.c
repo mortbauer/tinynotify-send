@@ -12,6 +12,8 @@ int main(void) {
 
 	s = notify_session_new();
 	print_errors(s);
+	notify_session_connect(s);
+	print_errors(s);
 	notify_session_free(s);
 
 	return 0;
