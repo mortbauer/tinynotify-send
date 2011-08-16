@@ -28,11 +28,7 @@ NotifySession notify_session_new(void) {
 }
 
 void notify_session_free(NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
-
-	if (s->conn)
-		dbus_connection_unref(s->conn);
-
+	notify_session_disconnect(session);
 	free(session);
 }
 
@@ -80,4 +76,15 @@ NotifyError notify_session_connect(NotifySession session) {
 	}
 
 	return _notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
+}
+
+void notify_session_disconnect(NotifySession session) {
+	struct _tinynotify_notify_session *s = session;
+
+	if (s->conn) {
+		dbus_connection_unref(s->conn);
+		s->conn = NULL;
+	}
+
+	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
 }

@@ -131,6 +131,19 @@ NotifyError notify_session_get_error(NotifySession session);
 const char* notify_session_get_error_message(NotifySession session);
 
 /**
+ * notify_session_disconnect
+ * @session: session to operate on
+ *
+ * Drop the connection to the D-Bus session bus.
+ *
+ * Note that calling this function is not obligatory. It will be called
+ * by notify_session_free() anyway.
+ *
+ * If no connection is established already, this function does nothing.
+ */
+void notify_session_disconnect(NotifySession session);
+
+/**
  * notify_session_connect
  * @session: session to operate on
  *
