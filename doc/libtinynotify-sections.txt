@@ -13,3 +13,9 @@ NotifyError
 notify_session_get_error
 notify_session_get_error_message
 </SECTION>
+<SECTION>
+<FILE>notification</FILE>
+Notification
+notification_new
+notification_free
+</SECTION>

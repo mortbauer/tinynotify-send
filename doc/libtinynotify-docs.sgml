@@ -14,6 +14,7 @@
 		<title>API reference</title>
 		<xi:include href="xml/session.xml"/>
 		<xi:include href="xml/error.xml"/>
+		<xi:include href="xml/notification.xml"/>
 	</chapter>
 
 	<index id="api-index-full">

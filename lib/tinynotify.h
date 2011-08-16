@@ -172,4 +172,49 @@ NotifyError notify_session_connect(NotifySession session);
  */
 void notify_session_set_app_name(NotifySession session, const char* app_name);
 
+/**
+ * SECTION: notification
+ * @short_description: API to deal with a single notification
+ * @include: tinynotify.h
+ * @stability: Unstable
+ *
+ * In order to send a notification, one must first create a new #Notification
+ * instance via notification_new(). When done with a particular notification,
+ * one should pass it to notification_free().
+ */
+
+/**
+ * Notification
+ *
+ * A type describing a single notification.
+ *
+ * It should be created using notification_new(), and disposed using
+ * notification_free().
+ */
+
+typedef void* Notification;
+
+/**
+ * notification_new
+ *
+ * Create and initialize a new libtinynotify notification.
+ *
+ * This function always succeeds. If it is unable to allocate the memory,
+ * program execution will be aborted.
+ *
+ * Returns: a newly-instantiated Notification
+ */
+Notification notification_new(void);
+
+/**
+ * notification_free
+ * @notification: the notification to free
+ *
+ * Free a libtinynotify notification.
+ *
+ * This function always succeeds. After a call to this function,
+ * a #Notification is no longer valid.
+ */
+void notification_free(Notification notification);
+
 #endif

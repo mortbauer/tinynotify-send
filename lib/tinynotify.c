@@ -104,3 +104,17 @@ void notify_session_set_app_name(NotifySession session, const char* app_name) {
 	else
 		s->app_name = NULL;
 }
+
+struct _tinynotify_notification {
+};
+
+Notification notification_new(void) {
+	struct _tinynotify_notification *ret;
+
+	assert(ret = malloc(sizeof(*ret)));
+	return ret;
+}
+
+void notification_free(Notification n) {
+	free(n);
+}
