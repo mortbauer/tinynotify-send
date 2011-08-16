@@ -70,7 +70,7 @@ NotifyError notify_session_get_error(NotifySession session);
  *
  * Get detailed error message for @session.
  *
- * Returns: a statically allocated or constant string
+ * Returns: a statically allocated or constant string (not to be freed)
  */
 const char* notify_session_get_error_message(NotifySession session);
 
