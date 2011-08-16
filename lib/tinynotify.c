@@ -7,12 +7,15 @@
 #include "tinynotify.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include <dbus/dbus.h>
 
 struct _tinynotify_notify_session {
 	DBusConnection *conn;
+
+	char* app_name;
 
 	NotifyError error;
 	char* error_details;
@@ -23,6 +26,7 @@ NotifySession notify_session_new(void) {
 
 	assert(ret = malloc(sizeof(*ret)));
 	ret->conn = NULL;
+	ret->app_name = NULL;
 	ret->error = NOTIFY_ERROR_NO_ERROR;
 	return ret;
 }
@@ -88,4 +92,15 @@ void notify_session_disconnect(NotifySession session) {
 	}
 
 	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
+}
+
+void notify_session_set_app_name(NotifySession session, const char* app_name) {
+	struct _tinynotify_notify_session *s = session;
+
+	if (s->app_name)
+		free(s->app_name);
+	if (app_name)
+		assert(s->app_name = strdup(app_name));
+	else
+		s->app_name = NULL;
 }

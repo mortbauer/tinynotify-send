@@ -160,4 +160,16 @@ void notify_session_disconnect(NotifySession session);
  */
 NotifyError notify_session_connect(NotifySession session);
 
+/**
+ * notify_session_set_app_name
+ * @session: session to operate on
+ * @app_name: a new app name or #NULL
+ *
+ * Set the default application name for notifications sent through this session.
+ *
+ * If #NULL is passed, the default application name will be cleared. Otherwise,
+ * the given string will be copied to #NotifySession.
+ */
+void notify_session_set_app_name(NotifySession session, const char* app_name);
+
 #endif

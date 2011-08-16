@@ -11,6 +11,7 @@ int main(void) {
 	NotifySession s;
 
 	s = notify_session_new();
+	notify_session_set_app_name(s, "foobar");
 	print_errors(s);
 	notify_session_connect(s);
 	print_errors(s);
