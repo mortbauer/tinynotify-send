@@ -1,0 +1,13 @@
+<SECTION>
+<FILE>session</FILE>
+NotifySession
+notify_session_new
+notify_session_free
+notify_session_connect
+</SECTION>
+<SECTION>
+<FILE>error</FILE>
+NotifyError
+notify_session_get_error
+notify_session_get_error_message
+</SECTION>
