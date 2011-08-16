@@ -139,6 +139,9 @@ const char* notify_session_get_error_message(NotifySession session);
  * Note that calling this function is not obligatory. If not used,
  * the connection will be established when sending the first notification.
  *
+ * If a connection is established already, this function does nothing
+ * and returns #NOTIFY_ERROR_NO_ERROR.
+ *
  * Returns: a #NotifyError or #NOTIFY_ERROR_NO_ERROR if connection succeeds.
  * For additional error details, see notify_session_get_error_message().
  */

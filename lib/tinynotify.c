@@ -62,20 +62,22 @@ const char* notify_session_get_error_message(NotifySession session) {
 
 NotifyError notify_session_connect(NotifySession session) {
 	struct _tinynotify_notify_session *s = session;
-	DBusError err;
 
-	assert(s->conn == NULL);
-	dbus_error_init(&err);
-	s->conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
-
-	assert(!s->conn == dbus_error_is_set(&err));
 	if (!s->conn) {
-		s->conn = NULL;
-		/* XXX: copy error message */
-		dbus_error_free(&err);
-		return _notify_session_set_error(s, NOTIFY_ERROR_DBUS_CONNECT);
-	} else
-		dbus_connection_set_exit_on_disconnect(s->conn, FALSE);
+		DBusError err;
+
+		dbus_error_init(&err);
+		s->conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+
+		assert(!s->conn == dbus_error_is_set(&err));
+		if (!s->conn) {
+			s->conn = NULL;
+			/* XXX: copy error message */
+			dbus_error_free(&err);
+			return _notify_session_set_error(s, NOTIFY_ERROR_DBUS_CONNECT);
+		} else
+			dbus_connection_set_exit_on_disconnect(s->conn, FALSE);
+	}
 
 	return _notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
 }
