@@ -196,6 +196,8 @@ typedef void* Notification;
 
 /**
  * notification_new
+ * @summary: short text summary of the notification
+ * @body: complete body text of the notification (or #NULL)
  *
  * Create and initialize a new libtinynotify notification.
  *
@@ -204,7 +206,7 @@ typedef void* Notification;
  *
  * Returns: a newly-instantiated Notification
  */
-Notification notification_new(void);
+Notification notification_new(const char* summary, const char* body);
 
 /**
  * notification_free

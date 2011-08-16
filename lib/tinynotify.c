@@ -106,15 +106,31 @@ void notify_session_set_app_name(NotifySession session, const char* app_name) {
 }
 
 struct _tinynotify_notification {
+	char* summary;
+	char* body;
 };
 
-Notification notification_new(void) {
+Notification notification_new(const char* summary, const char* body) {
 	struct _tinynotify_notification *ret;
 
+	assert(summary);
+
 	assert(ret = malloc(sizeof(*ret)));
+	assert(ret->summary = strdup(summary));
+	if (body && *body)
+		assert(ret->body = strdup(body));
+	else
+		ret->body = NULL;
+
 	return ret;
 }
 
-void notification_free(Notification n) {
-	free(n);
+void notification_free(Notification notification) {
+	struct _tinynotify_notification *n = notification;
+
+	if (n->body)
+		free(n->body);
+	free(n->summary);
+
+	free(notification);
 }
