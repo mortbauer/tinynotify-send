@@ -221,7 +221,7 @@ NotifyError notification_send(NotifySession session, Notification notification) 
 
 	dbus_error_init(&err);
 	reply = dbus_connection_send_with_reply_and_block(s->conn,
-			msg, 2000 /* XXX */, &err);
+			msg, 5000 /* XXX */, &err);
 
 	assert(!reply == dbus_error_is_set(&err));
 	if (!reply) {
