@@ -21,5 +21,8 @@ notify_session_get_error_message
 Notification
 notification_new
 notification_free
+NOTIFICATION_DEFAULT_APP_ICON
+NOTIFICATION_NO_APP_ICON
+notification_set_app_icon
 notification_send
 </SECTION>

@@ -138,6 +138,8 @@ struct _notification {
 	char* summary;
 	char* body;
 
+	char* app_icon;
+
 	dbus_uint32_t message_id;
 };
 
@@ -152,16 +154,31 @@ Notification notification_new(const char* summary, const char* body) {
 		assert(ret->body = strdup(body));
 	else
 		ret->body = NULL;
+	ret->app_icon = NULL;
 	ret->message_id = 0;
 
 	return ret;
 }
 
 void notification_free(Notification n) {
+	free(n->summary);
 	if (n->body)
 		free(n->body);
-	free(n->summary);
+	if (n->app_icon)
+		free(n->app_icon);
 	free(n);
+}
+
+const char* NOTIFICATION_DEFAULT_APP_ICON = NULL;
+const char* NOTIFICATION_NO_APP_ICON = "";
+
+void notification_set_app_icon(Notification n, const char* app_icon) {
+	if (n->app_icon)
+		free(n->app_icon);
+	if (app_icon)
+		assert(n->app_icon = strdup(app_icon));
+	else
+		n->app_icon = NULL;
 }
 
 NotifyError notification_send(Notification n, NotifySession s) {
@@ -174,7 +191,8 @@ NotifyError notification_send(Notification n, NotifySession s) {
 
 	const char *app_name = s->app_name ? s->app_name : "";
 	dbus_uint32_t replaces_id = 0;
-	const char *app_icon = s->app_icon ? s->app_icon : "";
+	const char *app_icon = n->app_icon ? n->app_icon :
+			s->app_icon ? s->app_icon : "";
 	const char *summary = n->summary;
 	const char *body = n->body ? n->body : "";
 	dbus_int32_t expire_timeout = -1;

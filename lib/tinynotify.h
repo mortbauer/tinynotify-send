@@ -262,6 +262,37 @@ Notification notification_new(const char* summary, const char* body);
 void notification_free(Notification notification);
 
 /**
+ * NOTIFICATION_DEFAULT_APP_ICON
+ *
+ * A constant specifying that the default app icon should be used (if specified
+ * in #NotifySession).
+ */
+extern const char* NOTIFICATION_DEFAULT_APP_ICON;
+
+/**
+ * NOTIFICATION_NO_APP_ICON
+ *
+ * A constant specifying that no app icon should ever be used (even if
+ * #NotifySession specifies one).
+ */
+extern const char* NOTIFICATION_NO_APP_ICON;
+
+/**
+ * notification_set_app_icon
+ * @notification: notification to operate on
+ * @app_icon: a new icon name
+ *
+ * Set the application icon for a single notification.
+ *
+ * If %NOTIFICATION_DEFAULT_APP_ICON is passed, the notification will be reset
+ * to use default app icon specified in #NotifySession (if one is set). If
+ * %NOTIFICATION_NO_APP_ICON is passed, the notification will not use any app
+ * icon, even if #NotifySession specifies one. Otherwise, the given string will
+ * be copied to #Notification.
+ */
+void notification_set_app_icon(Notification notification, const char* app_icon);
+
+/**
  * notification_send
  * @notification: the notification to send
  * @session: session to send the notification through
