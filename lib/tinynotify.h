@@ -254,6 +254,9 @@ void notification_free(Notification notification);
  *
  * Send a notification to the notification daemon.
  *
+ * If notification is displayed successfully, the received message ID is stored
+ * within the #Notification type.
+ *
  * Returns: a positive #NotifyError or #NOTIFY_ERROR_NO_ERROR
  */
 NotifyError notification_send(NotifySession session, Notification notification);

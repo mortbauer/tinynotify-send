@@ -145,6 +145,8 @@ void notify_session_set_app_icon(NotifySession session, const char* app_icon) {
 struct _tinynotify_notification {
 	char* summary;
 	char* body;
+
+	dbus_uint32_t message_id;
 };
 
 Notification notification_new(const char* summary, const char* body) {
@@ -158,6 +160,7 @@ Notification notification_new(const char* summary, const char* body) {
 		assert(ret->body = strdup(body));
 	else
 		ret->body = NULL;
+	ret->message_id = 0;
 
 	return ret;
 }
@@ -246,6 +249,7 @@ NotifyError notification_send(NotifySession session, Notification notification) 
 			dbus_error_free(&err);
 			ret = NOTIFY_ERROR_INVALID_REPLY;
 		} else {
+			n->message_id = new_id;
 			err_msg = NULL;
 			ret = NOTIFY_ERROR_NO_ERROR;
 		}
