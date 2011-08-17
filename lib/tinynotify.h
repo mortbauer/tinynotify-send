@@ -71,6 +71,7 @@ typedef void* NotifySession;
  * @NOTIFY_ERROR_NO_ERROR: no error
  * @NOTIFY_ERROR_DBUS_CONNECT: unable to connect to the session bus
  * @NOTIFY_ERROR_DBUS_SEND: unable to send the notification
+ * @NOTIFY_ERROR_INVALID_REPLY: invalid reply was received from server
  *
  * A tinynotify error code.
  *
@@ -83,6 +84,7 @@ typedef enum {
 
 	NOTIFY_ERROR_DBUS_CONNECT,
 	NOTIFY_ERROR_DBUS_SEND,
+	NOTIFY_ERROR_INVALID_REPLY,
 
 	/*< private >*/
 	NOTIFY_ERROR_COUNT

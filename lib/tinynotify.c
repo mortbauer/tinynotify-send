@@ -71,7 +71,8 @@ NotifyError notify_session_get_error(NotifySession session) {
 static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
 	"No error",
 	"Connecting to D-Bus failed: %s",
-	"Sending message over D-Bus failed: %s"
+	"Sending message over D-Bus failed: %s",
+	"Invalid reply received: %s"
 };
 
 const char* notify_session_get_error_message(NotifySession session) {
@@ -234,10 +235,22 @@ NotifyError notification_send(NotifySession session, Notification notification) 
 		dbus_error_free(&err);
 		ret = NOTIFY_ERROR_DBUS_SEND;
 	} else {
-		err_msg = NULL;
-		/* XXX: use reply */
+		dbus_uint32_t new_id;
+
+		assert(dbus_message_get_type(reply) == DBUS_MESSAGE_TYPE_METHOD_RETURN);
+
+		if (!dbus_message_get_args(reply, &err,
+					DBUS_TYPE_UINT32, &new_id,
+					DBUS_TYPE_INVALID)) {
+			err_msg = strdup(err.message);
+			dbus_error_free(&err);
+			ret = NOTIFY_ERROR_INVALID_REPLY;
+		} else {
+			err_msg = NULL;
+			ret = NOTIFY_ERROR_NO_ERROR;
+		}
+
 		dbus_message_unref(reply);
-		ret = NOTIFY_ERROR_NO_ERROR;
 	}
 
 	dbus_message_unref(msg);
