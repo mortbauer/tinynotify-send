@@ -7,6 +7,7 @@
 #include "tinynotify.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #ifndef NDEBUG
