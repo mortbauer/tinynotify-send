@@ -112,6 +112,8 @@ void notify_session_disconnect(NotifySession s) {
 	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
+const char* NOTIFY_SESSION_NO_APP_NAME = NULL;
+
 void notify_session_set_app_name(NotifySession s, const char* app_name) {
 	if (s->app_name)
 		free(s->app_name);
@@ -120,6 +122,8 @@ void notify_session_set_app_name(NotifySession s, const char* app_name) {
 	else
 		s->app_name = NULL;
 }
+
+const char* NOTIFY_SESSION_NO_APP_ICON = NULL;
 
 void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
 	if (s->app_icon)

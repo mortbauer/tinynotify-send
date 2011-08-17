@@ -165,16 +165,30 @@ void notify_session_disconnect(NotifySession session);
 NotifyError notify_session_connect(NotifySession session);
 
 /**
+ * NOTIFY_SESSION_NO_APP_NAME
+ *
+ * A constant specifying that no default app name is to be specified.
+ */
+extern const char* NOTIFY_SESSION_NO_APP_NAME;
+
+/**
  * notify_session_set_app_name
  * @session: session to operate on
  * @app_name: a new app name or #NULL
  *
  * Set the default application name for notifications sent through this session.
  *
- * If #NULL is passed, the default application name will be cleared. Otherwise,
- * the given string will be copied to #NotifySession.
+ * If %NOTIFY_SESSION_NO_APP_NAME is passed, the default application name will
+ * be cleared. Otherwise, the given string will be copied to #NotifySession.
  */
 void notify_session_set_app_name(NotifySession session, const char* app_name);
+
+/**
+ * NOTIFY_SESSION_NO_APP_ICON
+ *
+ * A constant specifying that no default app icon is to be specified.
+ */
+extern const char* NOTIFY_SESSION_NO_APP_ICON;
 
 /**
  * notify_session_set_app_icon
@@ -184,8 +198,8 @@ void notify_session_set_app_name(NotifySession session, const char* app_name);
  * Set the default application icon for notifications sent through this
  * session.
  *
- * If #NULL is passed, the default application icon will be cleared. Otherwise,
- * the given string will be copied to #NotifySession.
+ * If %NOTIFY_SESSION_NO_APP_ICON is passed, the default application icon will
+ * be cleared. Otherwise, the given string will be copied to #NotifySession.
  */
 void notify_session_set_app_icon(NotifySession session, const char* app_icon);
 
