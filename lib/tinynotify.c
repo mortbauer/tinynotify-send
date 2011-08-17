@@ -175,7 +175,7 @@ void notification_free(Notification notification) {
 	free(notification);
 }
 
-NotifyError notification_send(NotifySession session, Notification notification) {
+NotifyError notification_send(Notification notification, NotifySession session) {
 	struct _tinynotify_notify_session *s = session;
 	struct _tinynotify_notification *n = notification;
 	NotifyError ret;

@@ -249,8 +249,8 @@ void notification_free(Notification notification);
 
 /**
  * notification_send
- * @session: session to send the notification through
  * @notification: the notification to send
+ * @session: session to send the notification through
  *
  * Send a notification to the notification daemon.
  *
@@ -259,6 +259,6 @@ void notification_free(Notification notification);
  *
  * Returns: a positive #NotifyError or #NOTIFY_ERROR_NO_ERROR
  */
-NotifyError notification_send(NotifySession session, Notification notification);
+NotifyError notification_send(Notification notification, NotifySession session);
 
 #endif

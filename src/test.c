@@ -18,7 +18,7 @@ int main(void) {
 	print_errors(s);
 
 	n = notification_new("foo", "test bar");
-	notification_send(s, n);
+	notification_send(n, s);
 	print_errors(s);
 	notification_free(n);
 
