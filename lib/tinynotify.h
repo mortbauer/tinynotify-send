@@ -174,7 +174,7 @@ extern const char* NOTIFY_SESSION_NO_APP_NAME;
 /**
  * notify_session_set_app_name
  * @session: session to operate on
- * @app_name: a new app name or #NULL
+ * @app_name: a new app name
  *
  * Set the default application name for notifications sent through this session.
  *
@@ -193,7 +193,7 @@ extern const char* NOTIFY_SESSION_NO_APP_ICON;
 /**
  * notify_session_set_app_icon
  * @session: session to operate on
- * @app_icon: a new icon name or #NULL
+ * @app_icon: a new icon name
  *
  * Set the default application icon for notifications sent through this
  * session.
