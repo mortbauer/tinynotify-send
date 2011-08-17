@@ -36,6 +36,7 @@ NotifySession notify_session_new(void) {
 	ret->app_name = NULL;
 	ret->app_icon = NULL;
 	ret->error = NOTIFY_ERROR_NO_ERROR;
+	ret->error_details = NULL;
 	return ret;
 }
 
