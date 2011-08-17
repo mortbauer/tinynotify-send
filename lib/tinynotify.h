@@ -35,7 +35,7 @@
  * notify_session_free().
  */
 
-typedef void* NotifySession;
+typedef struct _notify_session* NotifySession;
 
 /**
  * SECTION: error
@@ -220,7 +220,7 @@ void notify_session_set_app_icon(NotifySession session, const char* app_icon);
  * notification_free().
  */
 
-typedef void* Notification;
+typedef struct _notification* Notification;
 
 /**
  * notification_new

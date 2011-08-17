@@ -17,7 +17,7 @@
 
 #include <dbus/dbus.h>
 
-struct _tinynotify_notify_session {
+struct _notify_session {
 	DBusConnection *conn;
 
 	char* app_name;
@@ -28,7 +28,7 @@ struct _tinynotify_notify_session {
 };
 
 NotifySession notify_session_new(void) {
-	struct _tinynotify_notify_session *ret;
+	NotifySession ret;
 
 	assert(ret = malloc(sizeof(*ret)));
 	ret->conn = NULL;
@@ -38,20 +38,18 @@ NotifySession notify_session_new(void) {
 	return ret;
 }
 
-void notify_session_free(NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
-
-	notify_session_disconnect(session);
+void notify_session_free(NotifySession s) {
+	notify_session_disconnect(s);
 
 	if (s->error_details)
 		free(s->error_details);
 	free(s->app_name);
 	free(s->app_icon);
-	free(session);
+	free(s);
 }
 
 static NotifyError _notify_session_set_error(
-		struct _tinynotify_notify_session *s,
+		NotifySession s,
 		NotifyError new_error,
 		char *error_details)
 {
@@ -62,9 +60,7 @@ static NotifyError _notify_session_set_error(
 	return new_error;
 }
 
-NotifyError notify_session_get_error(NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
-
+NotifyError notify_session_get_error(NotifySession s) {
 	return s->error;
 }
 
@@ -75,8 +71,7 @@ static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
 	"Invalid reply received: %s"
 };
 
-const char* notify_session_get_error_message(NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
+const char* notify_session_get_error_message(NotifySession s) {
 	static char* buf = NULL;
 
 	if (buf)
@@ -87,9 +82,7 @@ const char* notify_session_get_error_message(NotifySession session) {
 	return buf;
 }
 
-NotifyError notify_session_connect(NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
-
+NotifyError notify_session_connect(NotifySession s) {
 	if (!s->conn) {
 		DBusError err;
 
@@ -108,9 +101,7 @@ NotifyError notify_session_connect(NotifySession session) {
 	return _notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
-void notify_session_disconnect(NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
-
+void notify_session_disconnect(NotifySession s) {
 	if (s->conn) {
 		dbus_connection_close(s->conn);
 		dbus_connection_unref(s->conn);
@@ -120,9 +111,7 @@ void notify_session_disconnect(NotifySession session) {
 	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
-void notify_session_set_app_name(NotifySession session, const char* app_name) {
-	struct _tinynotify_notify_session *s = session;
-
+void notify_session_set_app_name(NotifySession s, const char* app_name) {
 	if (s->app_name)
 		free(s->app_name);
 	if (app_name)
@@ -131,9 +120,7 @@ void notify_session_set_app_name(NotifySession session, const char* app_name) {
 		s->app_name = NULL;
 }
 
-void notify_session_set_app_icon(NotifySession session, const char* app_icon) {
-	struct _tinynotify_notify_session *s = session;
-
+void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
 	if (s->app_icon)
 		free(s->app_icon);
 	if (app_icon)
@@ -142,7 +129,7 @@ void notify_session_set_app_icon(NotifySession session, const char* app_icon) {
 		s->app_icon = NULL;
 }
 
-struct _tinynotify_notification {
+struct _notification {
 	char* summary;
 	char* body;
 
@@ -150,7 +137,7 @@ struct _tinynotify_notification {
 };
 
 Notification notification_new(const char* summary, const char* body) {
-	struct _tinynotify_notification *ret;
+	Notification ret;
 
 	assert(summary);
 
@@ -165,19 +152,14 @@ Notification notification_new(const char* summary, const char* body) {
 	return ret;
 }
 
-void notification_free(Notification notification) {
-	struct _tinynotify_notification *n = notification;
-
+void notification_free(Notification n) {
 	if (n->body)
 		free(n->body);
 	free(n->summary);
-
-	free(notification);
+	free(n);
 }
 
-NotifyError notification_send(Notification notification, NotifySession session) {
-	struct _tinynotify_notify_session *s = session;
-	struct _tinynotify_notification *n = notification;
+NotifyError notification_send(Notification n, NotifySession s) {
 	NotifyError ret;
 	char *err_msg;
 
@@ -192,7 +174,7 @@ NotifyError notification_send(Notification notification, NotifySession session) 
 	const char *body = n->body ? n->body : "";
 	dbus_int32_t expire_timeout = -1;
 
-	if (notify_session_connect(session))
+	if (notify_session_connect(s))
 		return s->error;
 
 	assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
