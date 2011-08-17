@@ -53,7 +53,7 @@ typedef struct _notify_session* NotifySession;
  * guaranteed that the return value is equal to the result of calling
  * notify_session_get_error() immediately after the function.
  *
- * One may assume that #NOTIFY_ERROR_NO_ERROR will always evaluate to false.
+ * One may assume that %NOTIFY_ERROR_NO_ERROR will always evaluate to false.
  * Thus, #NotifyError can be used as a boolean result as well.
  *
  * A more detailed error description can be obtained using
@@ -75,7 +75,7 @@ typedef struct _notify_session* NotifySession;
  *
  * A tinynotify error code.
  *
- * Note that #NOTIFY_ERROR_NO_ERROR is guaranteed to be always 0. Thus, one can
+ * Note that %NOTIFY_ERROR_NO_ERROR is guaranteed to be always 0. Thus, one can
  * use this enum as a boolean for error indication.
  */
 
@@ -120,7 +120,7 @@ void notify_session_free(NotifySession session);
  *
  * Get current error for @session.
  *
- * Returns: positive #NotifyError or #NOTIFY_ERROR_NO_ERROR if no error
+ * Returns: positive #NotifyError or %NOTIFY_ERROR_NO_ERROR if no error
  */
 NotifyError notify_session_get_error(NotifySession session);
 
@@ -157,9 +157,9 @@ void notify_session_disconnect(NotifySession session);
  * the connection will be established when sending the first notification.
  *
  * If a connection is established already, this function does nothing
- * and returns #NOTIFY_ERROR_NO_ERROR.
+ * and returns %NOTIFY_ERROR_NO_ERROR.
  *
- * Returns: a #NotifyError or #NOTIFY_ERROR_NO_ERROR if connection succeeds.
+ * Returns: a #NotifyError or %NOTIFY_ERROR_NO_ERROR if connection succeeds.
  * For additional error details, see notify_session_get_error_message().
  */
 NotifyError notify_session_connect(NotifySession session);
@@ -302,7 +302,7 @@ void notification_set_app_icon(Notification notification, const char* app_icon);
  * If notification is displayed successfully, the received message ID is stored
  * within the #Notification type.
  *
- * Returns: a positive #NotifyError or #NOTIFY_ERROR_NO_ERROR
+ * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
  */
 NotifyError notification_send(Notification notification, NotifySession session);
 
