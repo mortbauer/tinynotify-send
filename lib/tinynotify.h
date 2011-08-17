@@ -246,7 +246,7 @@ typedef struct _notification* Notification;
  * This function always succeeds. If it is unable to allocate the memory,
  * program execution will be aborted.
  *
- * Returns: a newly-instantiated Notification
+ * Returns: a newly-instantiated #Notification
  */
 Notification notification_new(const char* summary, const char* body);
 
