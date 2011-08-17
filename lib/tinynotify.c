@@ -8,7 +8,12 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
+
+#ifndef NDEBUG
+#	include <assert.h>
+#else
+#	define assert
+#endif
 
 #include <dbus/dbus.h>
 
