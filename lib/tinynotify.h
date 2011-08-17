@@ -195,9 +195,20 @@ void notify_session_set_app_icon(NotifySession session, const char* app_icon);
  * @include: tinynotify.h
  * @stability: Unstable
  *
- * In order to send a notification, one must first create a new #Notification
- * instance via notification_new(). When done with a particular notification,
- * one should pass it to notification_free().
+ * A single notification in libtinynotify is represented by a #Notification
+ * instance. A new #Notification instance can be obtained using
+ * notification_new(), and should be freed when no longer used using
+ * notification_free().
+ *
+ * Although notifications aren't directly associated with sessions, they must
+ * use one in order to access the message bus. Thus, all functions interacting
+ * with the message bus require passing a #NotifySession explicitly.
+ *
+ * Such a function may store connection-specific information within
+ * the #Notification (e.g. the notification ID). However, it is guaranteed that
+ * it won't store any reference to the #NotifySession or any data contained
+ * within it. In other words, one may safely free a #NotifySession after use,
+ * and reuse the same #Notification in another session.
  */
 
 /**
