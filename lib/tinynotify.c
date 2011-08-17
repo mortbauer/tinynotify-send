@@ -117,7 +117,7 @@ const char* NOTIFY_SESSION_NO_APP_NAME = NULL;
 void notify_session_set_app_name(NotifySession s, const char* app_name) {
 	if (s->app_name)
 		free(s->app_name);
-	if (app_name)
+	if (app_name && *app_name)
 		assert(s->app_name = strdup(app_name));
 	else
 		s->app_name = NULL;
@@ -128,7 +128,7 @@ const char* NOTIFY_SESSION_NO_APP_ICON = NULL;
 void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
 	if (s->app_icon)
 		free(s->app_icon);
-	if (app_icon)
+	if (app_icon && *app_icon)
 		assert(s->app_icon = strdup(app_icon));
 	else
 		s->app_icon = NULL;
