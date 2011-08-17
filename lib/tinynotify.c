@@ -38,6 +38,8 @@ void notify_session_free(NotifySession session) {
 
 	notify_session_disconnect(session);
 
+	if (s->error_details)
+		free(s->error_details);
 	free(s->app_name);
 	free(s->app_icon);
 	free(session);
@@ -45,9 +47,13 @@ void notify_session_free(NotifySession session) {
 
 static NotifyError _notify_session_set_error(
 		struct _tinynotify_notify_session *s,
-		NotifyError new_error)
+		NotifyError new_error,
+		char *error_details)
 {
+	if (s->error_details)
+		free(s->error_details);
 	s->error = new_error;
+	s->error_details = error_details;
 	return new_error;
 }
 
@@ -59,14 +65,20 @@ NotifyError notify_session_get_error(NotifySession session) {
 
 static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
 	"No error",
-	"Connecting to D-Bus failed",
-	"Sending message over D-Bus failed"
+	"Connecting to D-Bus failed: %s",
+	"Sending message over D-Bus failed: %s"
 };
 
 const char* notify_session_get_error_message(NotifySession session) {
 	struct _tinynotify_notify_session *s = session;
+	static char* buf = NULL;
 
-	return _error_messages[s->error];
+	if (buf)
+		free(buf);
+	assert(asprintf(&buf, _error_messages[s->error],
+				s->error_details) != -1);
+
+	return buf;
 }
 
 NotifyError notify_session_connect(NotifySession session) {
@@ -80,15 +92,14 @@ NotifyError notify_session_connect(NotifySession session) {
 
 		assert(!s->conn == dbus_error_is_set(&err));
 		if (!s->conn) {
-			s->conn = NULL;
-			/* XXX: copy error message */
+			char *err_msg = strdup(err.message);
 			dbus_error_free(&err);
-			return _notify_session_set_error(s, NOTIFY_ERROR_DBUS_CONNECT);
+			return _notify_session_set_error(s, NOTIFY_ERROR_DBUS_CONNECT, err_msg);
 		} else
 			dbus_connection_set_exit_on_disconnect(s->conn, FALSE);
 	}
 
-	return _notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
+	return _notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
 void notify_session_disconnect(NotifySession session) {
@@ -100,7 +111,7 @@ void notify_session_disconnect(NotifySession session) {
 		s->conn = NULL;
 	}
 
-	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR);
+	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
 void notify_session_set_app_name(NotifySession session, const char* app_name) {
@@ -159,6 +170,7 @@ NotifyError notification_send(NotifySession session, Notification notification) 
 	struct _tinynotify_notify_session *s = session;
 	struct _tinynotify_notification *n = notification;
 	NotifyError ret;
+	char *err_msg;
 
 	DBusMessage *msg, *reply;
 	DBusMessageIter iter, subiter;
@@ -213,15 +225,16 @@ NotifyError notification_send(NotifySession session, Notification notification) 
 
 	assert(!reply == dbus_error_is_set(&err));
 	if (!reply) {
-		/* XXX: copy error message */
+		err_msg = strdup(err.message);
 		dbus_error_free(&err);
 		ret = NOTIFY_ERROR_DBUS_SEND;
 	} else {
+		err_msg = NULL;
 		/* XXX: use reply */
 		dbus_message_unref(reply);
 		ret = NOTIFY_ERROR_NO_ERROR;
 	}
 
 	dbus_message_unref(msg);
-	return _notify_session_set_error(s, ret);
+	return _notify_session_set_error(s, ret, err_msg);
 }

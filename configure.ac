@@ -10,7 +10,7 @@ AC_USE_SYSTEM_EXTENSIONS
 LT_INIT([disable-static])
 GTK_DOC_CHECK([1.15])
 
-AC_CHECK_FUNCS([strdup],, [
+AC_CHECK_FUNCS([strdup asprintf],, [
 	AC_MSG_ERROR([One of the required library functions was not found])
 ])
 PKG_CHECK_MODULES([DBUS], [dbus-1])
