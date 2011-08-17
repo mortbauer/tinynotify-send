@@ -15,6 +15,13 @@ AC_CHECK_FUNCS([strdup asprintf],, [
 ])
 PKG_CHECK_MODULES([DBUS], [dbus-1])
 
+AC_ARG_ENABLE([debug],
+	[AS_HELP_STRING([--disable-debug],
+		[Disable debugging asserts])])
+AS_IF([test x"$enable_debug" = x"no"], [
+	AC_DEFINE([NDEBUG], [1], [Set this to disable debugging asserts])
+])
+
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile doc/Makefile libtinynotify.pc])
 AC_OUTPUT
