@@ -28,7 +28,7 @@ struct _notify_session {
 	char* error_details;
 };
 
-NotifySession notify_session_new(void) {
+NotifySession notify_session_new(const char* app_name, const char* app_icon) {
 	NotifySession ret;
 
 	assert(ret = malloc(sizeof(*ret)));
@@ -37,6 +37,9 @@ NotifySession notify_session_new(void) {
 	ret->app_icon = NULL;
 	ret->error = NOTIFY_ERROR_NO_ERROR;
 	ret->error_details = NULL;
+
+	notify_session_set_app_name(ret, app_name);
+	notify_session_set_app_icon(ret, app_icon);
 	return ret;
 }
 

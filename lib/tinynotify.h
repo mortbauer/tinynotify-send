@@ -92,15 +92,19 @@ typedef enum {
 
 /**
  * notify_session_new
+ * @app_name: default application name for the session
+ * @app_icon: default application icon for the session
  *
- * Create and initialize a new libtinynotify session.
+ * Create and initialize a new libtinynotify session. Sets the default
+ * @app_name (unless %NOTIFY_SESSION_NO_APP_NAME) and @app_icon (unless
+ * %NOTIFY_SESSION_NO_APP_ICON).
  *
  * This function always succeeds. If it is unable to allocate the memory,
  * program execution will be aborted.
  *
  * Returns: a newly-instantiated NotifySession
  */
-NotifySession notify_session_new(void);
+NotifySession notify_session_new(const char* app_name, const char* app_icon);
 
 /**
  * notify_session_free
