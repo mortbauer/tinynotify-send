@@ -10,13 +10,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef NDEBUG
-#	include <assert.h>
-#else
-#	define assert
-#endif
+#include <assert.h>
+#define _mem_assert(x) _mem_check(!!(x), #x)
 
 #include <dbus/dbus.h>
+
+void _mem_check(int res, const char* stmt) {
+	if (!res) {
+		fputs("Memory allocation failed for: ", stderr);
+		fputs(stmt, stderr);
+		fputs("\n", stderr);
+		abort();
+	}
+}
 
 struct _notify_session {
 	DBusConnection *conn;
@@ -31,7 +37,7 @@ struct _notify_session {
 NotifySession notify_session_new(const char* app_name, const char* app_icon) {
 	NotifySession s;
 
-	assert(s = malloc(sizeof(*s)));
+	_mem_assert(s = malloc(sizeof(*s)));
 	s->conn = NULL;
 	s->app_name = NULL;
 	s->app_icon = NULL;
@@ -81,7 +87,7 @@ const char* notify_session_get_error_message(NotifySession s) {
 
 	if (buf)
 		free(buf);
-	assert(asprintf(&buf, _error_messages[s->error],
+	_mem_assert(asprintf(&buf, _error_messages[s->error],
 				s->error_details) != -1);
 
 	return buf;
@@ -122,7 +128,7 @@ void notify_session_set_app_name(NotifySession s, const char* app_name) {
 	if (s->app_name)
 		free(s->app_name);
 	if (app_name && *app_name)
-		assert(s->app_name = strdup(app_name));
+		_mem_assert(s->app_name = strdup(app_name));
 	else
 		s->app_name = NULL;
 }
@@ -133,7 +139,7 @@ void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
 	if (s->app_icon)
 		free(s->app_icon);
 	if (app_icon && *app_icon)
-		assert(s->app_icon = strdup(app_icon));
+		_mem_assert(s->app_icon = strdup(app_icon));
 	else
 		s->app_icon = NULL;
 }
@@ -154,9 +160,9 @@ Notification notification_new(const char* summary, const char* body) {
 
 	assert(summary);
 
-	assert(n = malloc(sizeof(*n)));
+	_mem_assert(n = malloc(sizeof(*n)));
 	/* can't use notification_set_summary() here because it has to free sth */
-	assert(n->summary = strdup(summary));
+	_mem_assert(n->summary = strdup(summary));
 	n->body = NULL;
 	n->app_icon = NULL;
 	n->message_id = 0;
@@ -181,7 +187,7 @@ void notification_set_app_icon(Notification n, const char* app_icon) {
 	if (n->app_icon)
 		free(n->app_icon);
 	if (app_icon)
-		assert(n->app_icon = strdup(app_icon));
+		_mem_assert(n->app_icon = strdup(app_icon));
 	else
 		n->app_icon = NULL;
 }
@@ -189,14 +195,14 @@ void notification_set_app_icon(Notification n, const char* app_icon) {
 void notification_set_summary(Notification n, const char* summary) {
 	free(n->summary);
 	assert(summary);
-	assert(n->summary = strdup(summary));
+	_mem_assert(n->summary = strdup(summary));
 }
 
 void notification_set_body(Notification n, const char* body) {
 	if (n->body)
 		free(n->body);
 	if (body && *body)
-		assert(n->body = strdup(body));
+		_mem_assert(n->body = strdup(body));
 	else
 		n->body = NULL;
 }
@@ -225,12 +231,12 @@ NotifyError notification_update(Notification n, NotifySession s) {
 	if (notify_session_connect(s))
 		return s->error;
 
-	assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
+	_mem_assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
 				"/org/freedesktop/Notifications",
 				"org.freedesktop.Notifications",
 				"Notify"));
 
-	assert(dbus_message_append_args(msg,
+	_mem_assert(dbus_message_append_args(msg,
 				DBUS_TYPE_STRING, &app_name,
 				DBUS_TYPE_UINT32, &replaces_id,
 				DBUS_TYPE_STRING, &app_icon,
@@ -241,21 +247,21 @@ NotifyError notification_update(Notification n, NotifySession s) {
 	dbus_message_iter_init_append(msg, &iter);
 
 	/* actions */
-	assert(dbus_message_iter_open_container(&iter,
+	_mem_assert(dbus_message_iter_open_container(&iter,
 				DBUS_TYPE_ARRAY, DBUS_TYPE_STRING_AS_STRING, &subiter));
-	assert(dbus_message_iter_close_container(&iter, &subiter));
+	_mem_assert(dbus_message_iter_close_container(&iter, &subiter));
 
 	/* hints */
-	assert(dbus_message_iter_open_container(&iter,
+	_mem_assert(dbus_message_iter_open_container(&iter,
 				DBUS_TYPE_ARRAY,
 				DBUS_DICT_ENTRY_BEGIN_CHAR_AS_STRING
 				DBUS_TYPE_STRING_AS_STRING
 				DBUS_TYPE_VARIANT_AS_STRING
 				DBUS_DICT_ENTRY_END_CHAR_AS_STRING,
 				&subiter));
-	assert(dbus_message_iter_close_container(&iter, &subiter));
+	_mem_assert(dbus_message_iter_close_container(&iter, &subiter));
 
-	assert(dbus_message_iter_append_basic(&iter,
+	_mem_assert(dbus_message_iter_append_basic(&iter,
 				DBUS_TYPE_INT32, &expire_timeout));
 
 	dbus_error_init(&err);
