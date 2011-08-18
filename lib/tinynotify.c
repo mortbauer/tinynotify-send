@@ -29,18 +29,18 @@ struct _notify_session {
 };
 
 NotifySession notify_session_new(const char* app_name, const char* app_icon) {
-	NotifySession ret;
+	NotifySession s;
 
-	assert(ret = malloc(sizeof(*ret)));
-	ret->conn = NULL;
-	ret->app_name = NULL;
-	ret->app_icon = NULL;
-	ret->error = NOTIFY_ERROR_NO_ERROR;
-	ret->error_details = NULL;
+	assert(s = malloc(sizeof(*s)));
+	s->conn = NULL;
+	s->app_name = NULL;
+	s->app_icon = NULL;
+	s->error = NOTIFY_ERROR_NO_ERROR;
+	s->error_details = NULL;
 
-	notify_session_set_app_name(ret, app_name);
-	notify_session_set_app_icon(ret, app_icon);
-	return ret;
+	notify_session_set_app_name(s, app_name);
+	notify_session_set_app_icon(s, app_icon);
+	return s;
 }
 
 void notify_session_free(NotifySession s) {
@@ -150,20 +150,20 @@ struct _notification {
 const char* NOTIFICATION_NO_BODY = NULL;
 
 Notification notification_new(const char* summary, const char* body) {
-	Notification ret;
+	Notification n;
 
 	assert(summary);
 
-	assert(ret = malloc(sizeof(*ret)));
-	assert(ret->summary = strdup(summary));
+	assert(n = malloc(sizeof(*n)));
+	assert(n->summary = strdup(summary));
 	if (body && *body)
-		assert(ret->body = strdup(body));
+		assert(n->body = strdup(body));
 	else
-		ret->body = NULL;
-	ret->app_icon = NULL;
-	ret->message_id = 0;
+		n->body = NULL;
+	n->app_icon = NULL;
+	n->message_id = 0;
 
-	return ret;
+	return n;
 }
 
 void notification_free(Notification n) {
