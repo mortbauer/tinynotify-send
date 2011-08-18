@@ -34,6 +34,27 @@ struct _notify_session {
 	char* error_details;
 };
 
+static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
+	"No error",
+	"Connecting to D-Bus failed: %s",
+	"Sending message over D-Bus failed: %s",
+	"Invalid reply received: %s"
+};
+
+static NotifyError _notify_session_set_error(
+		NotifySession s,
+		NotifyError new_error,
+		char *error_details)
+{
+	if (s->error_details)
+		free(s->error_details);
+	s->error = new_error;
+	_mem_assert(asprintf(&s->error_details, _error_messages[new_error],
+			error_details) != -1);
+
+	return new_error;
+}
+
 NotifySession notify_session_new(const char* app_name, const char* app_icon) {
 	NotifySession s;
 
@@ -41,9 +62,8 @@ NotifySession notify_session_new(const char* app_name, const char* app_icon) {
 	s->conn = NULL;
 	s->app_name = NULL;
 	s->app_icon = NULL;
-	s->error = NOTIFY_ERROR_NO_ERROR;
-	s->error_details = NULL;
 
+	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 	notify_session_set_app_name(s, app_name);
 	notify_session_set_app_icon(s, app_icon);
 	return s;
@@ -59,38 +79,12 @@ void notify_session_free(NotifySession s) {
 	free(s);
 }
 
-static NotifyError _notify_session_set_error(
-		NotifySession s,
-		NotifyError new_error,
-		char *error_details)
-{
-	if (s->error_details)
-		free(s->error_details);
-	s->error = new_error;
-	s->error_details = error_details;
-	return new_error;
-}
-
 NotifyError notify_session_get_error(NotifySession s) {
 	return s->error;
 }
 
-static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
-	"No error",
-	"Connecting to D-Bus failed: %s",
-	"Sending message over D-Bus failed: %s",
-	"Invalid reply received: %s"
-};
-
 const char* notify_session_get_error_message(NotifySession s) {
-	static char* buf = NULL;
-
-	if (buf)
-		free(buf);
-	_mem_assert(asprintf(&buf, _error_messages[s->error],
-				s->error_details) != -1);
-
-	return buf;
+	return s->error_details;
 }
 
 NotifyError notify_session_connect(NotifySession s) {
