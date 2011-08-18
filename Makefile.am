@@ -18,4 +18,4 @@ libtinynotify_la_SOURCES = lib/tinynotify.c lib/tinynotify.h
 
 test_CPPFLAGS = -I$(top_srcdir)/lib
 test_LDADD = libtinynotify.la
-test_SOURCES = src/test.c
+test_SOURCES = src/test.c lib/tinynotify.h
