@@ -1,4 +1,5 @@
 #include "tinynotify.h"
+#include "tinynotify-cli.h"
 
 #include <stdio.h>
 
@@ -7,7 +8,7 @@ void print_errors(NotifySession s) {
 			notify_session_get_error_message(s));
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
 	NotifySession s;
 	Notification n;
 
@@ -16,11 +17,12 @@ int main(void) {
 	notify_session_connect(s);
 	print_errors(s);
 
-	n = notification_new("foo %s", "test bar %d");
+	n = notification_new_from_cmdline(argc, argv);
+	if (!n) {
+		printf("Synopsis: %s [-i icon] summary [body]\n", argv[0]);
+		return 1;
+	}
 	notification_send(n, s, "bar", 1);
-	print_errors(s);
-	notification_set_summary(n, "baz?");
-	notification_update(n, s, 2);
 	print_errors(s);
 	notification_free(n);
 
