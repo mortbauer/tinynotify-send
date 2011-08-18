@@ -19,6 +19,7 @@ notify_session_get_error_message
 <SECTION>
 <FILE>notification</FILE>
 Notification
+NOTIFICATION_NO_BODY
 notification_new
 notification_free
 NOTIFICATION_DEFAULT_APP_ICON

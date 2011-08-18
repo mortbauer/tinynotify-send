@@ -147,6 +147,8 @@ struct _notification {
 	dbus_uint32_t message_id;
 };
 
+const char* NOTIFICATION_NO_BODY = NULL;
+
 Notification notification_new(const char* summary, const char* body) {
 	Notification ret;
 

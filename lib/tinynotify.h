@@ -241,9 +241,16 @@ void notify_session_set_app_icon(NotifySession session, const char* app_icon);
 typedef struct _notification* Notification;
 
 /**
+ * NOTIFICATION_NO_BODY
+ *
+ * A constant specifying that the notification has no body (detailed message).
+ */
+extern const char* NOTIFICATION_NO_BODY;
+
+/**
  * notification_new
  * @summary: short text summary of the notification
- * @body: complete body text of the notification (or #NULL)
+ * @body: complete body text of the notification (or %NOTIFICATION_NO_BODY)
  *
  * Create and initialize a new libtinynotify notification.
  *
