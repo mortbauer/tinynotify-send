@@ -19,6 +19,8 @@ int main(void) {
 	n = notification_new("foo", "test bar");
 	notification_send(n, s);
 	print_errors(s);
+	notification_update(n, s);
+	print_errors(s);
 	notification_free(n);
 
 	notify_session_free(s);

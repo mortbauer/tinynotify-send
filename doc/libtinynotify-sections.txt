@@ -25,4 +25,5 @@ NOTIFICATION_DEFAULT_APP_ICON
 NOTIFICATION_NO_APP_ICON
 notification_set_app_icon
 notification_send
+notification_update
 </SECTION>

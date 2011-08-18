@@ -186,6 +186,11 @@ void notification_set_app_icon(Notification n, const char* app_icon) {
 }
 
 NotifyError notification_send(Notification n, NotifySession s) {
+	n->message_id = 0;
+	return notification_update(n, s);
+}
+
+NotifyError notification_update(Notification n, NotifySession s) {
 	NotifyError ret;
 	char *err_msg;
 
@@ -194,7 +199,7 @@ NotifyError notification_send(Notification n, NotifySession s) {
 	DBusError err;
 
 	const char *app_name = s->app_name ? s->app_name : "";
-	dbus_uint32_t replaces_id = 0;
+	dbus_uint32_t replaces_id = n->message_id;
 	const char *app_icon = n->app_icon ? n->app_icon :
 			s->app_icon ? s->app_icon : "";
 	const char *summary = n->summary;

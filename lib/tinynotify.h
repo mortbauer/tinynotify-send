@@ -304,10 +304,28 @@ void notification_set_app_icon(Notification notification, const char* app_icon);
  * Send a notification to the notification daemon.
  *
  * If notification is displayed successfully, the received message ID is stored
- * within the #Notification type.
+ * within the #Notification type. The notification_update() function can be
+ * used to update the notification afterwards.
  *
  * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
  */
 NotifyError notification_send(Notification notification, NotifySession session);
+
+/**
+ * notification_update
+ * @notification: the notification being updated
+ * @session: session to send the notification through
+ *
+ * Send an updated notification to the notification daemon. This will
+ * replace/update the notification sent previously to server with the same
+ * #Notification instance.
+ *
+ * If notification is updated successfully, the received message ID is stored
+ * within the #Notification type. Further updates to it can be done using
+ * notification_update() then.
+ *
+ * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
+ */
+NotifyError notification_update(Notification notification, NotifySession session);
 
 #endif
