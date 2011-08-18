@@ -297,6 +297,15 @@ extern const char* NOTIFICATION_NO_APP_ICON;
 void notification_set_app_icon(Notification notification, const char* app_icon);
 
 /**
+ * notification_set_summary
+ * @notification: notification to operate on
+ * @summary: a new summary
+ *
+ * Set the summary for a single notification.
+ */
+void notification_set_summary(Notification notification, const char* summary);
+
+/**
  * notification_send
  * @notification: the notification to send
  * @session: session to send the notification through

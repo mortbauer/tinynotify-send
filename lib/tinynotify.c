@@ -185,6 +185,12 @@ void notification_set_app_icon(Notification n, const char* app_icon) {
 		n->app_icon = NULL;
 }
 
+void notification_set_summary(Notification n, const char* summary) {
+	free(n->summary);
+	assert(summary);
+	assert(n->summary = strdup(summary));
+}
+
 NotifyError notification_send(Notification n, NotifySession s) {
 	n->message_id = 0;
 	return notification_update(n, s);

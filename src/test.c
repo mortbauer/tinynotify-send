@@ -19,6 +19,7 @@ int main(void) {
 	n = notification_new("foo", "test bar");
 	notification_send(n, s);
 	print_errors(s);
+	notification_set_summary(n, "baz?");
 	notification_update(n, s);
 	print_errors(s);
 	notification_free(n);
