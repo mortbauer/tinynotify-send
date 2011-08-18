@@ -193,6 +193,15 @@ void notification_set_summary(Notification n, const char* summary) {
 	assert(n->summary = strdup(summary));
 }
 
+void notification_set_body(Notification n, const char* body) {
+	if (n->body)
+		free(n->body);
+	if (body && *body)
+		assert(n->body = strdup(body));
+	else
+		n->body = NULL;
+}
+
 NotifyError notification_send(Notification n, NotifySession s) {
 	n->message_id = 0;
 	return notification_update(n, s);

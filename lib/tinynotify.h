@@ -308,9 +308,18 @@ void notification_set_app_icon(Notification notification, const char* app_icon);
  * @notification: notification to operate on
  * @summary: a new summary
  *
- * Set the summary for a single notification.
+ * Set the summary of a notification.
  */
 void notification_set_summary(Notification notification, const char* summary);
+
+/**
+ * notification_set_body
+ * @notification: notification to operate on
+ * @body: a new body (or %NOTIFICATION_NO_BODY)
+ *
+ * Set (or unset) the body of a notification.
+ */
+void notification_set_body(Notification notification, const char* body);
 
 /**
  * notification_send
