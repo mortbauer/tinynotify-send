@@ -155,14 +155,13 @@ Notification notification_new(const char* summary, const char* body) {
 	assert(summary);
 
 	assert(n = malloc(sizeof(*n)));
+	/* can't use notification_set_summary() here because it has to free sth */
 	assert(n->summary = strdup(summary));
-	if (body && *body)
-		assert(n->body = strdup(body));
-	else
-		n->body = NULL;
+	n->body = NULL;
 	n->app_icon = NULL;
 	n->message_id = 0;
 
+	notification_set_body(n, body);
 	return n;
 }
 
