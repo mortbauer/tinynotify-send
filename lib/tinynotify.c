@@ -8,6 +8,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 
 #include <assert.h>
@@ -202,14 +203,10 @@ void notification_set_body(Notification n, const char* body) {
 		n->body = NULL;
 }
 
-NotifyError notification_send(Notification n, NotifySession s) {
-	n->message_id = 0;
-	return notification_update(n, s);
-}
-
-NotifyError notification_update(Notification n, NotifySession s) {
+static NotifyError notification_update_va(Notification n, NotifySession s, va_list ap) {
 	NotifyError ret;
 	char *err_msg;
+	char *f_summary, *f_body;
 
 	DBusMessage *msg, *reply;
 	DBusMessageIter iter, subiter;
@@ -226,6 +223,9 @@ NotifyError notification_update(Notification n, NotifySession s) {
 	if (notify_session_connect(s))
 		return s->error;
 
+	_mem_assert(vasprintf(&f_summary, summary, ap) != -1);
+	_mem_assert(vasprintf(&f_body, body, ap) != -1);
+
 	_mem_assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
 				"/org/freedesktop/Notifications",
 				"org.freedesktop.Notifications",
@@ -235,8 +235,8 @@ NotifyError notification_update(Notification n, NotifySession s) {
 				DBUS_TYPE_STRING, &app_name,
 				DBUS_TYPE_UINT32, &replaces_id,
 				DBUS_TYPE_STRING, &app_icon,
-				DBUS_TYPE_STRING, &summary,
-				DBUS_TYPE_STRING, &body,
+				DBUS_TYPE_STRING, &f_summary,
+				DBUS_TYPE_STRING, &f_body,
 				DBUS_TYPE_INVALID));
 
 	dbus_message_iter_init_append(msg, &iter);
@@ -289,5 +289,34 @@ NotifyError notification_update(Notification n, NotifySession s) {
 	}
 
 	dbus_message_unref(msg);
+	free(f_summary);
+	free(f_body);
 	return _notify_session_set_error(s, ret, err_msg);
+}
+
+static NotifyError notification_send_va(Notification n, NotifySession s, va_list ap) {
+	n->message_id = 0;
+	return notification_update_va(n, s, ap);
+}
+
+NotifyError notification_send(Notification n, NotifySession s, ...) {
+	va_list ap;
+	NotifyError ret;
+
+	va_start(ap, s);
+	ret = notification_send_va(n, s, ap);
+	va_end(ap);
+
+	return ret;
+}
+
+NotifyError notification_update(Notification n, NotifySession s, ...) {
+	va_list ap;
+	NotifyError ret;
+
+	va_start(ap, s);
+	ret = notification_update_va(n, s, ap);
+	va_end(ap);
+
+	return ret;
 }

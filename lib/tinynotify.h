@@ -257,6 +257,9 @@ extern const char* NOTIFICATION_NO_BODY;
  * This function always succeeds. If it is unable to allocate the memory,
  * program execution will be aborted.
  *
+ * Note: @summary & @body are printf()-style format strings. When using a plain
+ * string there, one should make sure to escape all '%' occurences.
+ *
  * Returns: a newly-instantiated #Notification
  */
 Notification notification_new(const char* summary, const char* body);
@@ -306,18 +309,24 @@ void notification_set_app_icon(Notification notification, const char* app_icon);
 /**
  * notification_set_summary
  * @notification: notification to operate on
- * @summary: a new summary
+ * @summary: a new summary (format string)
  *
  * Set the summary of a notification.
+ *
+ * Note: @summary is a printf()-style format string. When using a plain string,
+ * one must ensure to escape all occurences of '%'.
  */
 void notification_set_summary(Notification notification, const char* summary);
 
 /**
  * notification_set_body
  * @notification: notification to operate on
- * @body: a new body (or %NOTIFICATION_NO_BODY)
+ * @body: a new body (format string, or %NOTIFICATION_NO_BODY)
  *
  * Set (or unset) the body of a notification.
+ *
+ * Note: @body is a printf()-style format string. When using a plain string,
+ * one must ensure to escape all occurences of '%'.
  */
 void notification_set_body(Notification notification, const char* body);
 
@@ -325,8 +334,14 @@ void notification_set_body(Notification notification, const char* body);
  * notification_send
  * @notification: the notification to send
  * @session: session to send the notification through
+ * @...: additional arguments for summary & body format strings
  *
  * Send a notification to the notification daemon.
+ *
+ * If summary and/or body contains any printf()-style directives,
+ * their arguments should be passed to this function. If both of them do,
+ * arguments for the summary format string should be specified first,
+ * and arguments to the body format string should immediately follow.
  *
  * If notification is displayed successfully, the received message ID is stored
  * within the #Notification type. The notification_update() function can be
@@ -334,16 +349,22 @@ void notification_set_body(Notification notification, const char* body);
  *
  * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
  */
-NotifyError notification_send(Notification notification, NotifySession session);
+NotifyError notification_send(Notification notification, NotifySession session, ...);
 
 /**
  * notification_update
  * @notification: the notification being updated
  * @session: session to send the notification through
+ * @...: additional arguments for summary & body format strings
  *
  * Send an updated notification to the notification daemon. This will
  * replace/update the notification sent previously to server with the same
  * #Notification instance.
+ *
+ * If summary and/or body contains any printf()-style directives,
+ * their arguments should be passed to this function. If both of them do,
+ * arguments for the summary format string should be specified first,
+ * and arguments to the body format string should immediately follow.
  *
  * If notification is updated successfully, the received message ID is stored
  * within the #Notification type. Further updates to it can be done using
@@ -351,6 +372,6 @@ NotifyError notification_send(Notification notification, NotifySession session);
  *
  * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
  */
-NotifyError notification_update(Notification notification, NotifySession session);
+NotifyError notification_update(Notification notification, NotifySession session, ...);
 
 #endif

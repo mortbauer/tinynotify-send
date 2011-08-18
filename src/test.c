@@ -16,11 +16,11 @@ int main(void) {
 	notify_session_connect(s);
 	print_errors(s);
 
-	n = notification_new("foo", "test bar");
-	notification_send(n, s);
+	n = notification_new("foo %s", "test bar %d");
+	notification_send(n, s, "bar", 1);
 	print_errors(s);
 	notification_set_summary(n, "baz?");
-	notification_update(n, s);
+	notification_update(n, s, 2);
 	print_errors(s);
 	notification_free(n);
 
