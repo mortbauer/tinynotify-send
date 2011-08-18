@@ -62,6 +62,7 @@ NotifySession notify_session_new(const char* app_name, const char* app_icon) {
 	s->conn = NULL;
 	s->app_name = NULL;
 	s->app_icon = NULL;
+	s->error_details = NULL;
 
 	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 	notify_session_set_app_name(s, app_name);
