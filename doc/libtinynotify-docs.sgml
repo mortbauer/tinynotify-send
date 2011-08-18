@@ -11,6 +11,11 @@
 	</bookinfo>
 
 	<chapter>
+		<title>Examples</title>
+		<xi:include href="example-mailclient.xml"/>
+	</chapter>
+
+	<chapter>
 		<title>API reference</title>
 		<xi:include href="xml/session.xml"/>
 		<xi:include href="xml/error.xml"/>
