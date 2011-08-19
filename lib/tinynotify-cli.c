@@ -23,7 +23,7 @@ static void _handle_version(const char *version_str) {
 
 static const char* const _option_descs[] = {
 	" ICON", "application icon (name or path)",
-	", -?", "show help message",
+	NULL, "show help message",
 	NULL, "output version information"
 };
 
@@ -39,18 +39,28 @@ static const struct option _getopt_longopts[] = {
 #endif
 
 static void _handle_help(const char *argv0) {
+#ifdef HAVE_GETOPT_LONG
+	const struct option* opt;
+#else
 	const char* opt;
+#endif
 	const char* const* desc;
 
 	char buf[22];
 
 	fprintf(stderr, "Usage: %s [options] summary [body]\n\n", argv0);
 
+#ifdef HAVE_GETOPT_LONG
+	for (opt = _getopt_longopts, desc = _option_descs;
+			opt->name; opt++, desc++) {
+		sprintf(buf, "-%c, --%s%s", opt->val, opt->name, *desc ? *desc : "");
+#else
 	for (opt = _getopt_optstring, desc = _option_descs;
 			*opt; opt++, desc++) {
 		if (*opt == ':' || *opt == '?')
 			opt++; /* last will be 'V', so we don't need to recheck *opt */
 		sprintf(buf, "-%c%s", *opt, *desc ? *desc : "");
+#endif
 		fprintf(stderr, "  %-20s %s\n", buf, *(++desc));
 	}
 }
