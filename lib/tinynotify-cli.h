@@ -22,26 +22,19 @@
  * notification_new_from_cmdline
  * @argc: command-line argument count
  * @argv: command-line argument values
+ * @version_str: string to output on --version
  *
  * Parse the command-line options and create a new #Notification instance
  * from them (with unformatted summary & body).
  *
- * Currently, this recognizes '-i' for icon. It takes two first non-option args
- * for summary (obligatory) and body (optional). Further arguments and unknown
- * options are silently ignored.
+ * This function does handle complete command-line parsing for the application,
+ * including handling invalid args, --help and --version. It should be called
+ * ASAP, and if it returns %NULL, the application should terminate immediately
+ * and quietly (it will handle the necessary output itself).
  *
- * This function uses getopt(), and doesn't reset it. If it is used after
- * another getopt() call without reset, it will start where previous getopt()
- * left off. If getopt() is used after it without reset, it will start where
- * this functions lefts off.
- *
- * After a call to this function, optind contains the index of first unused
- * command-line argument after the option list (i.e. the third non-option
- * argument on the command-line).
- *
- * Returns: a newly-allocated #Notification instance, or %NULL if args
- * are invalid (e.g. summary missing)
+ * Returns: a newly-allocated #Notification instance, or %NULL if application
+ * should terminate (invalid args, --help, --version)
  */
-Notification notification_new_from_cmdline(int argc, char *argv[]);
+Notification notification_new_from_cmdline(int argc, char *argv[], const char *version_str);
 
 #endif

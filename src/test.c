@@ -17,11 +17,9 @@ int main(int argc, char *argv[]) {
 	notify_session_connect(s);
 	print_errors(s);
 
-	n = notification_new_from_cmdline(argc, argv);
-	if (!n) {
-		printf("Synopsis: %s [-i icon] summary [body]\n", argv[0]);
+	n = notification_new_from_cmdline(argc, argv, "test 0.1");
+	if (!n)
 		return 1;
-	}
 	notification_send(n, s, "bar", 1);
 	print_errors(s);
 	notification_close(n, s);

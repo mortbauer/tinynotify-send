@@ -8,11 +8,42 @@
 #include "tinynotify-cli.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <getopt.h>
 
-Notification notification_new_from_cmdline(int argc, char *argv[]) {
-	int opterr_backup = opterr;
+static void _handle_version(const char *version_str) {
+	fprintf(stderr, "%s (libtinynotify %s)\n", version_str, PACKAGE_VERSION);
+}
+
+/* remember to keep all option-related stuff in the same order! */
+
+static const char* const _option_descs[] = {
+	"ICON", "application icon (name or path)",
+	NULL, "show help message",
+	NULL, "output version information"
+};
+
+static const char* const _getopt_optstring = "i:hV";
+
+static void _handle_help(const char *argv0) {
+	const char* opt;
+	const char* const* desc;
+
+	char buf[22];
+
+	fprintf(stderr, "Usage: %s [options] summary [body]\n\n", argv0);
+
+	for (opt = _getopt_optstring, desc = _option_descs;
+			*opt; opt++, desc++) {
+		if (*opt == ':')
+			opt++; /* last will be 'V', so we don't need to recheck *opt */
+		sprintf(buf, "-%c %s", *opt, *desc ? *desc : "");
+		fprintf(stderr, "  %-20s %s\n", buf, *(++desc));
+	}
+}
+
+Notification notification_new_from_cmdline(int argc, char *argv[], const char *version_str) {
 	int arg;
 
 	const char *icon = NOTIFICATION_DEFAULT_APP_ICON;
@@ -21,15 +52,20 @@ Notification notification_new_from_cmdline(int argc, char *argv[]) {
 
 	Notification n;
 
-	opterr = 0; /* be quiet about nonsense args */
-	while (((arg = getopt(argc, argv, "i:"))) != -1) {
+	while (((arg = getopt(argc, argv, _getopt_optstring))) != -1) {
 		switch (arg) {
 			case 'i':
 				icon = optarg;
 				break;
+			case 'V':
+				_handle_version(version_str);
+				return NULL;
+			case 'h':
+			case '?':
+				_handle_help(argv[0]);
+				return NULL;
 		}
 	}
-	opterr = opterr_backup;
 
 	if (optind >= argc) {
 		/* XXX, better error handling? */
