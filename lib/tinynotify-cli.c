@@ -10,7 +10,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <getopt.h>
+
+#ifdef HAVE_GETOPT_LONG
+#	include <getopt.h>
+#endif
 
 static void _handle_version(const char *version_str) {
 	fprintf(stderr, "%s (libtinynotify %s)\n", version_str, PACKAGE_VERSION);
@@ -25,6 +28,15 @@ static const char* const _option_descs[] = {
 };
 
 static const char* const _getopt_optstring = "i:h?V";
+
+#ifdef HAVE_GETOPT_LONG
+static const struct option _getopt_longopts[] = {
+	{ "icon", required_argument, NULL, 'i' },
+	{ "help", no_argument, NULL, 'h' },
+	{ "version", no_argument, NULL, 'V' },
+	{ 0, 0, 0, 0 }
+};
+#endif
 
 static void _handle_help(const char *argv0) {
 	const char* opt;
@@ -52,7 +64,12 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 
 	Notification n;
 
+#ifdef HAVE_GETOPT_LONG
+	while (((arg = getopt_long(argc, argv, _getopt_optstring,
+						_getopt_longopts, NULL))) != -1) {
+#else
 	while (((arg = getopt(argc, argv, _getopt_optstring))) != -1) {
+#endif
 		switch (arg) {
 			case 'i':
 				icon = optarg;

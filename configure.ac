@@ -23,6 +23,7 @@ AS_IF([test x"$enable_cli" != x"no"], [
 		AC_MSG_WARN([getopt() not found, disabling CLI])
 		enable_cli=no
 	])
+	AC_CHECK_FUNCS([getopt_long])
 ])
 AM_CONDITIONAL([ENABLE_CLI], [test x"$enable_cli" != x"no"])
 
