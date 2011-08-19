@@ -24,6 +24,8 @@ int main(int argc, char *argv[]) {
 	}
 	notification_send(n, s, "bar", 1);
 	print_errors(s);
+	notification_close(n, s);
+	print_errors(s);
 	notification_free(n);
 
 	notify_session_free(s);

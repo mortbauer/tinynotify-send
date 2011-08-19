@@ -39,7 +39,8 @@ static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
 	"No error",
 	"Connecting to D-Bus failed: %s",
 	"Sending message over D-Bus failed: %s",
-	"Invalid reply received: %s"
+	"Invalid reply received: %s",
+	"No notification-id is specified"
 };
 
 static NotifyError _notify_session_set_error(
@@ -150,6 +151,8 @@ struct _notification {
 	dbus_uint32_t message_id;
 };
 
+static const dbus_uint32_t NOTIFICATION_NO_NOTIFICATION_ID = 0;
+
 const char* NOTIFICATION_NO_BODY = NULL;
 
 Notification notification_new_unformatted(const char* summary, const char* body) {
@@ -162,7 +165,7 @@ Notification notification_new_unformatted(const char* summary, const char* body)
 	_mem_assert(n->summary = strdup(summary));
 	n->body = NULL;
 	n->app_icon = NULL;
-	n->message_id = 0;
+	n->message_id = NOTIFICATION_NO_NOTIFICATION_ID;
 
 	notification_set_body(n, body);
 	notification_set_formatting(n, 0);
@@ -314,7 +317,7 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 }
 
 static NotifyError notification_send_va(Notification n, NotifySession s, va_list ap) {
-	n->message_id = 0;
+	n->message_id = NOTIFICATION_NO_NOTIFICATION_ID;
 	return notification_update_va(n, s, ap);
 }
 
@@ -338,4 +341,58 @@ NotifyError notification_update(Notification n, NotifySession s, ...) {
 	va_end(ap);
 
 	return ret;
+}
+
+NotifyError notification_close(Notification n, NotifySession s) {
+	NotifyError ret;
+	char *err_msg;
+
+	DBusMessage *msg, *reply;
+	DBusError err;
+
+	dbus_uint32_t id = n->message_id;
+
+	if (id == NOTIFICATION_NO_NOTIFICATION_ID)
+		return _notify_session_set_error(s, NOTIFY_ERROR_NO_NOTIFICATION_ID, NULL);
+
+	if (notify_session_connect(s))
+		return s->error;
+
+	_mem_assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
+				"/org/freedesktop/Notifications",
+				"org.freedesktop.Notifications",
+				"CloseNotification"));
+
+	_mem_assert(dbus_message_append_args(msg,
+				DBUS_TYPE_UINT32, &id,
+				DBUS_TYPE_INVALID));
+
+	dbus_error_init(&err);
+	reply = dbus_connection_send_with_reply_and_block(s->conn,
+			msg, 5000 /* XXX */, &err);
+
+	assert(!reply == dbus_error_is_set(&err));
+	if (!reply) {
+		err_msg = strdup(err.message);
+		dbus_error_free(&err);
+		ret = NOTIFY_ERROR_DBUS_SEND;
+	} else {
+		assert(dbus_message_get_type(reply) == DBUS_MESSAGE_TYPE_METHOD_RETURN);
+
+		if (!dbus_message_get_args(reply, &err,
+					DBUS_TYPE_INVALID)) {
+			err_msg = strdup(err.message);
+			dbus_error_free(&err);
+			ret = NOTIFY_ERROR_INVALID_REPLY;
+		} else {
+			n->message_id = NOTIFICATION_NO_NOTIFICATION_ID;
+			err_msg = NULL;
+			ret = NOTIFY_ERROR_NO_ERROR;
+		}
+
+		dbus_message_unref(reply);
+	}
+
+	dbus_message_unref(msg);
+	return _notify_session_set_error(s, ret, err_msg);
 }

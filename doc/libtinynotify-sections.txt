@@ -28,6 +28,7 @@ NOTIFICATION_NO_APP_ICON
 notification_set_app_icon
 notification_send
 notification_update
+notification_close
 notification_set_formatting
 notification_set_summary
 notification_set_body

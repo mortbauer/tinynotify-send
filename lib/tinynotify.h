@@ -72,6 +72,7 @@ typedef struct _notify_session* NotifySession;
  * @NOTIFY_ERROR_DBUS_CONNECT: unable to connect to the session bus
  * @NOTIFY_ERROR_DBUS_SEND: unable to send the notification
  * @NOTIFY_ERROR_INVALID_REPLY: invalid reply was received from server
+ * @NOTIFY_ERROR_NO_NOTIFICATION_ID: no notification-id set in #Notification
  *
  * A tinynotify error code.
  *
@@ -85,6 +86,7 @@ typedef enum {
 	NOTIFY_ERROR_DBUS_CONNECT,
 	NOTIFY_ERROR_DBUS_SEND,
 	NOTIFY_ERROR_INVALID_REPLY,
+	NOTIFY_ERROR_NO_NOTIFICATION_ID,
 
 	/*< private >*/
 	NOTIFY_ERROR_COUNT
@@ -352,6 +354,9 @@ NotifyError notification_send(Notification notification, NotifySession session, 
  * replace/update the notification sent previously to server with the same
  * #Notification instance.
  *
+ * If the #Notification has no ID stored, notification_update() will work
+ * like notification_send(), and obtain a new ID.
+ *
  * If summary and/or body contains any printf()-style directives,
  * their arguments should be passed to this function. If both of them do,
  * arguments for the summary format string should be specified first,
@@ -364,6 +369,24 @@ NotifyError notification_send(Notification notification, NotifySession session, 
  * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
  */
 NotifyError notification_update(Notification notification, NotifySession session, ...);
+
+/**
+ * notification_close
+ * @notification: the notification to close
+ * @session: session to send the request through
+ *
+ * Request closing the notification sent previously to server.
+ *
+ * This function succeeds unless a communication error occurs (or no ID was
+ * set). It is undefined whether the notification was closed due to it, before
+ * it or the notification identifier was invalid.
+ *
+ * This function unsets the notification ID stored in #Notification -- it is no
+ * longer valid after the notification is closed.
+ *
+ * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
+ */
+NotifyError notification_close(Notification notification, NotifySession session);
 
 /**
  * notification_set_formatting
