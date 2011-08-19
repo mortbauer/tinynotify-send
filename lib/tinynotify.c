@@ -234,13 +234,37 @@ void notification_set_body(Notification n, const char* body) {
 		n->body = NULL;
 }
 
+static void _notification_append_hint(DBusMessageIter* subiter,
+		const char* key, const char* hint_type, const void* hint_val) {
+	DBusMessageIter dictiter, variter;
+
+	_mem_assert(dbus_message_iter_open_container(subiter,
+				DBUS_TYPE_DICT_ENTRY,
+				NULL,
+				&dictiter));
+
+	_mem_assert(dbus_message_iter_append_basic(&dictiter,
+				DBUS_TYPE_STRING, &key));
+
+	_mem_assert(dbus_message_iter_open_container(&dictiter,
+				DBUS_TYPE_VARIANT,
+				hint_type,
+				&variter));
+
+	_mem_assert(dbus_message_iter_append_basic(&variter,
+				*hint_type, hint_val));
+
+	_mem_assert(dbus_message_iter_close_container(&dictiter, &variter));
+	_mem_assert(dbus_message_iter_close_container(subiter, &dictiter));
+}
+
 static NotifyError notification_update_va(Notification n, NotifySession s, va_list ap) {
 	NotifyError ret;
 	char *err_msg;
 	char *f_summary, *f_body;
 
 	DBusMessage *msg, *reply;
-	DBusMessageIter iter, subiter, dictiter, variter;
+	DBusMessageIter iter, subiter;
 	DBusError err;
 
 	const char *app_name = s->app_name ? s->app_name : "";
@@ -293,27 +317,10 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 
 	/* -> urgency */
 	if (n->urgency != NOTIFICATION_NO_URGENCY) {
-		const char* const urgency_key = "urgency";
 		const unsigned char urgency = n->urgency;
 
-		_mem_assert(dbus_message_iter_open_container(&subiter,
-					DBUS_TYPE_DICT_ENTRY,
-					NULL,
-					&dictiter));
-
-		_mem_assert(dbus_message_iter_append_basic(&dictiter,
-					DBUS_TYPE_STRING, &urgency_key));
-
-		_mem_assert(dbus_message_iter_open_container(&dictiter,
-					DBUS_TYPE_VARIANT,
-					DBUS_TYPE_BYTE_AS_STRING,
-					&variter));
-
-		_mem_assert(dbus_message_iter_append_basic(&variter,
-					DBUS_TYPE_BYTE, &urgency));
-
-		_mem_assert(dbus_message_iter_close_container(&dictiter, &variter));
-		_mem_assert(dbus_message_iter_close_container(&subiter, &dictiter));
+		_notification_append_hint(&subiter, "urgency",
+				DBUS_TYPE_BYTE_AS_STRING, &urgency);
 	}
 
 	_mem_assert(dbus_message_iter_close_container(&iter, &subiter));
