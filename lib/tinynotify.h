@@ -280,17 +280,6 @@ Notification notification_new(const char* summary, const char* body);
 Notification notification_new_unformatted(const char* summary, const char* body);
 
 /**
- * notification_set_formatting
- * @notification: notification to operate on
- * @formatting: zero (false) to disable, non-zero (true) to enable
- *
- * Enable or disable formatting within a #Notification. If formatting is
- * enabled, summary & body are expected to be printf()-style format strings; if
- * it is disabled, they are treated as plain strings.
- */
-void notification_set_formatting(Notification notification, int formatting);
-
-/**
  * notification_free
  * @notification: the notification to free
  *
@@ -331,24 +320,6 @@ extern const char* NOTIFICATION_NO_APP_ICON;
  * be copied to #Notification.
  */
 void notification_set_app_icon(Notification notification, const char* app_icon);
-
-/**
- * notification_set_summary
- * @notification: notification to operate on
- * @summary: a new summary (format string)
- *
- * Set the summary of a notification.
- */
-void notification_set_summary(Notification notification, const char* summary);
-
-/**
- * notification_set_body
- * @notification: notification to operate on
- * @body: a new body (format string, or %NOTIFICATION_NO_BODY)
- *
- * Set (or unset) the body of a notification.
- */
-void notification_set_body(Notification notification, const char* body);
 
 /**
  * notification_send
@@ -393,5 +364,45 @@ NotifyError notification_send(Notification notification, NotifySession session, 
  * Returns: a positive #NotifyError or %NOTIFY_ERROR_NO_ERROR
  */
 NotifyError notification_update(Notification notification, NotifySession session, ...);
+
+/**
+ * notification_set_formatting
+ * @notification: notification to operate on
+ * @formatting: zero (false) to disable, non-zero (true) to enable
+ *
+ * Enable or disable formatting within a #Notification. If formatting is
+ * enabled, summary & body are expected to be printf()-style format strings; if
+ * it is disabled, they are treated as plain strings.
+ *
+ * Note: this function shouldn't be used unless necessary. It is preferred to
+ * create a new #Notification instead.
+ */
+void notification_set_formatting(Notification notification, int formatting);
+
+/**
+ * notification_set_summary
+ * @notification: notification to operate on
+ * @summary: a new summary (format string)
+ *
+ * Set the summary of a notification.
+ *
+ * Note: this function shouldn't be used unless necessary. It is preferred to
+ * create a new #Notification instead, or use variant (formatted) summary
+ * in the constructor.
+ */
+void notification_set_summary(Notification notification, const char* summary);
+
+/**
+ * notification_set_body
+ * @notification: notification to operate on
+ * @body: a new body (format string, or %NOTIFICATION_NO_BODY)
+ *
+ * Set (or unset) the body of a notification.
+ *
+ * Note: this function shouldn't be used unless necessary. It is preferred to
+ * create a new #Notification instead, or use variant (formatted) summary
+ * in the constructor.
+ */
+void notification_set_body(Notification notification, const char* body);
 
 #endif
