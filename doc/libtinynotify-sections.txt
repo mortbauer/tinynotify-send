@@ -22,6 +22,7 @@ Notification
 NOTIFICATION_NO_BODY
 notification_new
 notification_free
+notification_set_formatting
 NOTIFICATION_DEFAULT_APP_ICON
 NOTIFICATION_NO_APP_ICON
 notification_set_app_icon

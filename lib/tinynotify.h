@@ -257,12 +257,24 @@ extern const char* NOTIFICATION_NO_BODY;
  * This function always succeeds. If it is unable to allocate the memory,
  * program execution will be aborted.
  *
- * Note: @summary & @body are printf()-style format strings. When using a plain
- * string there, one should make sure to escape all '%' occurences.
+ * Note: @summary & @body are printf()-style format strings by default. When
+ * using a plain string there, one should ensure to call
+ * notification_set_formatting() to disable it.
  *
  * Returns: a newly-instantiated #Notification
  */
 Notification notification_new(const char* summary, const char* body);
+
+/**
+ * notification_set_formatting
+ * @notification: notification to operate on
+ * @formatting: zero (false) to disable, non-zero (true) to enable
+ *
+ * Enable or disable formatting within a #Notification. If formatting is
+ * enabled, summary & body are expected to be printf()-style format strings; if
+ * it is disabled, they are treated as plain strings.
+ */
+void notification_set_formatting(Notification notification, int formatting);
 
 /**
  * notification_free

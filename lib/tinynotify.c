@@ -143,6 +143,7 @@ void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
 struct _notification {
 	char* summary;
 	char* body;
+	int formatting;
 
 	char* app_icon;
 
@@ -162,6 +163,7 @@ Notification notification_new(const char* summary, const char* body) {
 	n->body = NULL;
 	n->app_icon = NULL;
 	n->message_id = 0;
+	n->formatting = 1;
 
 	notification_set_body(n, body);
 	return n;
@@ -174,6 +176,10 @@ void notification_free(Notification n) {
 	if (n->app_icon)
 		free(n->app_icon);
 	free(n);
+}
+
+void notification_set_formatting(Notification n, int formatting) {
+	n->formatting = formatting;
 }
 
 const char* NOTIFICATION_DEFAULT_APP_ICON = NULL;
@@ -223,8 +229,13 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 	if (notify_session_connect(s))
 		return s->error;
 
-	_mem_assert(vasprintf(&f_summary, summary, ap) != -1);
-	_mem_assert(vasprintf(&f_body, body, ap) != -1);
+	if (n->formatting) {
+		_mem_assert(vasprintf(&f_summary, summary, ap) != -1);
+		_mem_assert(vasprintf(&f_body, body, ap) != -1);
+
+		summary = f_summary;
+		body = f_body;
+	}
 
 	_mem_assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
 				"/org/freedesktop/Notifications",
@@ -235,8 +246,8 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 				DBUS_TYPE_STRING, &app_name,
 				DBUS_TYPE_UINT32, &replaces_id,
 				DBUS_TYPE_STRING, &app_icon,
-				DBUS_TYPE_STRING, &f_summary,
-				DBUS_TYPE_STRING, &f_body,
+				DBUS_TYPE_STRING, &summary,
+				DBUS_TYPE_STRING, &body,
 				DBUS_TYPE_INVALID));
 
 	dbus_message_iter_init_append(msg, &iter);
@@ -289,8 +300,10 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 	}
 
 	dbus_message_unref(msg);
-	free(f_summary);
-	free(f_body);
+	if (n->formatting) {
+		free(f_summary);
+		free(f_body);
+	}
 	return _notify_session_set_error(s, ret, err_msg);
 }
 
