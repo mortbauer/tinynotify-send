@@ -27,12 +27,12 @@ static const char* const _option_descs[] = {
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "i:h?V";
+static const char* const _getopt_optstring = "i:?V";
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
 	{ "icon", required_argument, NULL, 'i' },
-	{ "help", no_argument, NULL, 'h' },
+	{ "help", no_argument, NULL, '?' },
 	{ "version", no_argument, NULL, 'V' },
 	{ 0, 0, 0, 0 }
 };
@@ -57,7 +57,7 @@ static void _handle_help(const char *argv0) {
 #else
 	for (opt = _getopt_optstring, desc = _option_descs;
 			*opt; opt++, desc++) {
-		if (*opt == ':' || *opt == '?')
+		if (*opt == ':')
 			opt++; /* last will be 'V', so we don't need to recheck *opt */
 		sprintf(buf, "-%c%s", *opt, *desc ? *desc : "");
 #endif
@@ -87,7 +87,6 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 			case 'V':
 				_handle_version(version_str);
 				return NULL;
-			case 'h':
 			case '?':
 				_handle_help(argv[0]);
 				return NULL;
