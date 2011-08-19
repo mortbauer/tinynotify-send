@@ -28,10 +28,4 @@ bin_PROGRAMS = tinynotify-send
 tinynotify_send_CPPFLAGS = -I$(top_srcdir)/lib
 tinynotify_send_LDADD = libtinynotify.la libtinynotify-cli.la
 tinynotify_send_SOURCES = src/tinynotify-send.c lib/tinynotify.h lib/tinynotify-cli.h
-
-noinst_PROGRAMS = test
-
-test_CPPFLAGS = -I$(top_srcdir)/lib
-test_LDADD = libtinynotify.la libtinynotify-cli.la
-test_SOURCES = src/test.c lib/tinynotify.h
 endif
