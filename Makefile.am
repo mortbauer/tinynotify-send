@@ -23,6 +23,12 @@ libtinynotify_cli_la_LDFLAGS = -version-info 0:0:0
 libtinynotify_cli_la_LIBADD = libtinynotify.la
 libtinynotify_cli_la_SOURCES = lib/tinynotify-cli.c lib/tinynotify-cli.h lib/tinynotify.h
 
+bin_PROGRAMS = tinynotify-send
+
+tinynotify_send_CPPFLAGS = -I$(top_srcdir)/lib
+tinynotify_send_LDADD = libtinynotify.la libtinynotify-cli.la
+tinynotify_send_SOURCES = src/tinynotify-send.c lib/tinynotify.h lib/tinynotify-cli.h
+
 noinst_PROGRAMS = test
 
 test_CPPFLAGS = -I$(top_srcdir)/lib
