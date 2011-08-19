@@ -323,6 +323,33 @@ extern const char* NOTIFICATION_NO_APP_ICON;
 void notification_set_app_icon(Notification notification, const char* app_icon);
 
 /**
+ * NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT
+ *
+ * A constant specifying that the default expire timeout should be used.
+ */
+extern const int NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT;
+
+/**
+ * NOTIFICATION_NO_EXPIRE_TIMEOUT
+ *
+ * A constant specifying that the notification shall not expire.
+ */
+extern const int NOTIFICATION_NO_EXPIRE_TIMEOUT;
+
+/**
+ * notification_set_expire_timeout
+ * @notification: notification to operate on
+ * @expire_timeout: a new expiration timeout [ms]
+ *
+ * Set the expiration timeout for a notification, in milliseconds.
+ *
+ * If %NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT is used, the notification expires
+ * on a server-specified, default timeout. If %NOTIFICATION_NO_EXPIRE_TIMEOUT
+ * is used, the notification doesn't expire and needs to be closed explicitly.
+ */
+void notification_set_expire_timeout(Notification notification, int expire_timeout);
+
+/**
  * notification_send
  * @notification: the notification to send
  * @session: session to send the notification through
