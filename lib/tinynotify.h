@@ -213,7 +213,6 @@ void notify_session_set_app_icon(NotifySession session, const char* app_icon);
  * SECTION: notification
  * @short_description: API to deal with a single notification
  * @include: tinynotify.h
- * @stability: Unstable
  *
  * A single notification in libtinynotify is represented by a #Notification
  * instance. A new #Notification instance can be obtained using
