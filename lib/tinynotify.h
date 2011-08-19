@@ -257,13 +257,27 @@ extern const char* NOTIFICATION_NO_BODY;
  * This function always succeeds. If it is unable to allocate the memory,
  * program execution will be aborted.
  *
- * Note: @summary & @body are printf()-style format strings by default. When
- * using a plain string there, one should ensure to call
- * notification_set_formatting() to disable it.
+ * Note: @summary & @body are printf()-style format strings by default. For
+ * plain strings, please use notification_new_unformatted() instead.
  *
  * Returns: a newly-instantiated #Notification
  */
 Notification notification_new(const char* summary, const char* body);
+
+/**
+ * notification_new_unformatted
+ * @summary: short text summary of the notification
+ * @body: complete body text of the notification (or %NOTIFICATION_NO_BODY)
+ *
+ * Create and initialize a new libtinynotify notification using unformatted
+ * summary & body strings.
+ *
+ * This function always succeeds. If it is unable to allocate the memory,
+ * program execution will be aborted.
+ *
+ * Returns: a newly-instantiated #Notification
+ */
+Notification notification_new_unformatted(const char* summary, const char* body);
 
 /**
  * notification_set_formatting

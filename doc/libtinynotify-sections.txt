@@ -21,6 +21,7 @@ notify_session_get_error_message
 Notification
 NOTIFICATION_NO_BODY
 notification_new
+notification_new_unformatted
 notification_free
 notification_set_formatting
 NOTIFICATION_DEFAULT_APP_ICON

@@ -40,8 +40,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[]) {
 	if (optind < argc)
 		body = argv[optind++];
 
-	n = notification_new(summary, body);
-	notification_set_formatting(n, 0);
+	n = notification_new_unformatted(summary, body);
 	if (icon)
 		notification_set_app_icon(n, icon);
 

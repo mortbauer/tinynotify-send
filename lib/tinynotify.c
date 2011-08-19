@@ -152,7 +152,7 @@ struct _notification {
 
 const char* NOTIFICATION_NO_BODY = NULL;
 
-Notification notification_new(const char* summary, const char* body) {
+Notification notification_new_unformatted(const char* summary, const char* body) {
 	Notification n;
 
 	assert(summary);
@@ -163,9 +163,15 @@ Notification notification_new(const char* summary, const char* body) {
 	n->body = NULL;
 	n->app_icon = NULL;
 	n->message_id = 0;
-	n->formatting = 1;
 
 	notification_set_body(n, body);
+	notification_set_formatting(n, 0);
+	return n;
+}
+
+Notification notification_new(const char* summary, const char* body) {
+	Notification n = notification_new_unformatted(summary, body);
+	notification_set_formatting(n, 1);
 	return n;
 }
 
