@@ -180,10 +180,6 @@ Notification notification_new_unformatted(const char* summary, const char* body)
 	return n;
 }
 
-void notification_set_urgency(Notification n, NotificationUrgency urgency) {
-	n->urgency = urgency;
-}
-
 Notification notification_new(const char* summary, const char* body) {
 	Notification n = notification_new_unformatted(summary, body);
 	notification_set_formatting(n, 1);
@@ -197,10 +193,6 @@ void notification_free(Notification n) {
 	if (n->app_icon)
 		free(n->app_icon);
 	free(n);
-}
-
-void notification_set_formatting(Notification n, int formatting) {
-	n->formatting = formatting;
 }
 
 const char* NOTIFICATION_DEFAULT_APP_ICON = NULL;
@@ -222,19 +214,8 @@ void notification_set_expire_timeout(Notification n, int expire_timeout) {
 	n->expire_timeout = expire_timeout;
 }
 
-void notification_set_summary(Notification n, const char* summary) {
-	free(n->summary);
-	assert(summary);
-	_mem_assert(n->summary = strdup(summary));
-}
-
-void notification_set_body(Notification n, const char* body) {
-	if (n->body)
-		free(n->body);
-	if (body && *body)
-		_mem_assert(n->body = strdup(body));
-	else
-		n->body = NULL;
+void notification_set_urgency(Notification n, NotificationUrgency urgency) {
+	n->urgency = urgency;
 }
 
 const char* NOTIFICATION_NO_CATEGORY = NULL;
@@ -462,4 +443,23 @@ NotifyError notification_close(Notification n, NotifySession s) {
 
 	dbus_message_unref(msg);
 	return _notify_session_set_error(s, ret, err_msg);
+}
+
+void notification_set_formatting(Notification n, int formatting) {
+	n->formatting = formatting;
+}
+
+void notification_set_summary(Notification n, const char* summary) {
+	free(n->summary);
+	assert(summary);
+	_mem_assert(n->summary = strdup(summary));
+}
+
+void notification_set_body(Notification n, const char* body) {
+	if (n->body)
+		free(n->body);
+	if (body && *body)
+		_mem_assert(n->body = strdup(body));
+	else
+		n->body = NULL;
 }
