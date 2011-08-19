@@ -29,6 +29,8 @@ notification_set_app_icon
 NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT
 NOTIFICATION_NO_EXPIRE_TIMEOUT
 notification_set_expire_timeout
+NotificationUrgency
+notification_set_urgency
 notification_send
 notification_update
 notification_close

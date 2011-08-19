@@ -147,6 +147,7 @@ struct _notification {
 	int formatting;
 
 	dbus_int32_t expire_timeout;
+	NotificationUrgency urgency;
 
 	char* app_icon;
 
@@ -172,7 +173,12 @@ Notification notification_new_unformatted(const char* summary, const char* body)
 	notification_set_body(n, body);
 	notification_set_formatting(n, 0);
 	notification_set_expire_timeout(n, NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT);
+	notification_set_urgency(n, NOTIFICATION_NO_URGENCY);
 	return n;
+}
+
+void notification_set_urgency(Notification n, NotificationUrgency urgency) {
+	n->urgency = urgency;
 }
 
 Notification notification_new(const char* summary, const char* body) {
@@ -234,7 +240,7 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 	char *f_summary, *f_body;
 
 	DBusMessage *msg, *reply;
-	DBusMessageIter iter, subiter;
+	DBusMessageIter iter, subiter, dictiter, variter;
 	DBusError err;
 
 	const char *app_name = s->app_name ? s->app_name : "";
@@ -284,6 +290,32 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 				DBUS_TYPE_VARIANT_AS_STRING
 				DBUS_DICT_ENTRY_END_CHAR_AS_STRING,
 				&subiter));
+
+	/* -> urgency */
+	if (n->urgency != NOTIFICATION_NO_URGENCY) {
+		const char* const urgency_key = "urgency";
+		const unsigned char urgency = n->urgency;
+
+		_mem_assert(dbus_message_iter_open_container(&subiter,
+					DBUS_TYPE_DICT_ENTRY,
+					NULL,
+					&dictiter));
+
+		_mem_assert(dbus_message_iter_append_basic(&dictiter,
+					DBUS_TYPE_STRING, &urgency_key));
+
+		_mem_assert(dbus_message_iter_open_container(&dictiter,
+					DBUS_TYPE_VARIANT,
+					DBUS_TYPE_BYTE_AS_STRING,
+					&variter));
+
+		_mem_assert(dbus_message_iter_append_basic(&variter,
+					DBUS_TYPE_BYTE, &urgency));
+
+		_mem_assert(dbus_message_iter_close_container(&dictiter, &variter));
+		_mem_assert(dbus_message_iter_close_container(&subiter, &dictiter));
+	}
+
 	_mem_assert(dbus_message_iter_close_container(&iter, &subiter));
 
 	_mem_assert(dbus_message_iter_append_basic(&iter,

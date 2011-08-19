@@ -24,16 +24,19 @@ static void _handle_version(const char *version_str) {
 static const char* const _option_descs[] = {
 	" ICON", "application icon (name or path)",
 	" TIME", "expiration timeout (in ms)",
+	" LEVEL", "urgency level (0 - low, 1 - normal, 2 - critical)",
 	NULL, "show help message",
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "i:t:?V";
+static const char* const _getopt_optstring = "i:t:u:?V";
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
 	{ "icon", required_argument, NULL, 'i' },
 	{ "expire-time", required_argument, NULL, 't' },
+	{ "urgency", required_argument, NULL, 'u' },
+
 	{ "help", no_argument, NULL, '?' },
 	{ "version", no_argument, NULL, 'V' },
 	{ 0, 0, 0, 0 }
@@ -74,6 +77,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 	const char *summary;
 	const char *body = NOTIFICATION_NO_BODY;
 	int expire_timeout = NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT;
+	NotificationUrgency urgency = NOTIFICATION_NO_URGENCY;
 
 	Notification n;
 
@@ -89,6 +93,9 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 				break;
 			case 't':
 				expire_timeout = atoi(optarg);
+				break;
+			case 'u':
+				urgency = atoi(optarg);
 				break;
 			case 'V':
 				_handle_version(version_str);
@@ -116,6 +123,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 	if (icon)
 		notification_set_app_icon(n, icon);
 	notification_set_expire_timeout(n, expire_timeout);
+	notification_set_urgency(n, urgency);
 
 	return n;
 }

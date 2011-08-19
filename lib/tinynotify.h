@@ -350,6 +350,38 @@ extern const int NOTIFICATION_NO_EXPIRE_TIMEOUT;
 void notification_set_expire_timeout(Notification notification, int expire_timeout);
 
 /**
+ * NotificationUrgency
+ * @NOTIFICATION_NO_URGENCY: urgency not set
+ * @NOTIFICATION_URGENCY_LOW: low urgency level
+ * @NOTIFICATION_URGENCY_NORMAL: normal urgency level
+ * @NOTIFICATION_URGENCY_CRITICAL: critical urgency level
+ *
+ * A urgency level, for notification_set_urgency().
+ *
+ * Note that %NOTIFICATION_NO_URGENCY is not a protocol constant, the other
+ * urgency levels are.
+ */
+
+typedef enum {
+	NOTIFICATION_NO_URGENCY = -1,
+	NOTIFICATION_URGENCY_LOW = 0,
+	NOTIFICATION_URGENCY_NORMAL = 1,
+	NOTIFICATION_URGENCY_CRITICAL = 2
+} NotificationUrgency;
+
+/**
+ * notification_set_urgency
+ * @notification: notification to operate on
+ * @urgency: a new urgency level
+ *
+ * Set the urgency level for a notification.
+ *
+ * If set to %NOTIFICATION_NO_URGENCY, the current urgency level would be
+ * cleared.
+ */
+void notification_set_urgency(Notification notification, NotificationUrgency urgency);
+
+/**
  * notification_send
  * @notification: the notification to send
  * @session: session to send the notification through
