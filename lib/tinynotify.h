@@ -382,6 +382,25 @@ typedef enum {
 void notification_set_urgency(Notification notification, NotificationUrgency urgency);
 
 /**
+ * NOTIFICATION_NO_CATEGORY
+ *
+ * A constant specifying that no category should be used.
+ */
+extern const char* NOTIFICATION_NO_CATEGORY;
+
+/**
+ * notification_set_category
+ * @notification: notification to operate on
+ * @category: a new category, or %NOTIFICATION_NO_CATEGORY
+ *
+ * Set the category for a notification.
+ *
+ * If set to %NOTIFICATION_NO_CATEGORY, the current category will be cleared;
+ * otherwise, the category string will be copied into #Notification.
+ */
+void notification_set_category(Notification notification, const char* category);
+
+/**
  * notification_send
  * @notification: the notification to send
  * @session: session to send the notification through

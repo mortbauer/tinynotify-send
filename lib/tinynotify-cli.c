@@ -22,6 +22,7 @@ static void _handle_version(const char *version_str) {
 /* remember to keep all option-related stuff in the same order! */
 
 static const char* const _option_descs[] = {
+	" CATEGORY", "category",
 	" ICON", "application icon (name or path)",
 	" TIME", "expiration timeout (in ms)",
 	" LEVEL", "urgency level (0 - low, 1 - normal, 2 - critical)",
@@ -29,10 +30,11 @@ static const char* const _option_descs[] = {
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "i:t:u:?V";
+static const char* const _getopt_optstring = "c:i:t:u:?V";
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
+	{ "category", required_argument, NULL, 'c' },
 	{ "icon", required_argument, NULL, 'i' },
 	{ "expire-time", required_argument, NULL, 't' },
 	{ "urgency", required_argument, NULL, 'u' },
@@ -78,6 +80,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 	const char *body = NOTIFICATION_NO_BODY;
 	int expire_timeout = NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT;
 	NotificationUrgency urgency = NOTIFICATION_NO_URGENCY;
+	const char *category = NOTIFICATION_NO_CATEGORY;
 
 	Notification n;
 
@@ -88,6 +91,9 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 	while (((arg = getopt(argc, argv, _getopt_optstring))) != -1) {
 #endif
 		switch (arg) {
+			case 'c':
+				category = optarg;
+				break;
 			case 'i':
 				icon = optarg;
 				break;
@@ -124,6 +130,8 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 		notification_set_app_icon(n, icon);
 	notification_set_expire_timeout(n, expire_timeout);
 	notification_set_urgency(n, urgency);
+	if (category)
+		notification_set_category(n, category);
 
 	return n;
 }

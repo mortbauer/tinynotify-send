@@ -147,7 +147,9 @@ struct _notification {
 	int formatting;
 
 	dbus_int32_t expire_timeout;
+
 	NotificationUrgency urgency;
+	char* category;
 
 	char* app_icon;
 
@@ -167,6 +169,7 @@ Notification notification_new_unformatted(const char* summary, const char* body)
 	/* can't use notification_set_summary() here because it has to free sth */
 	_mem_assert(n->summary = strdup(summary));
 	n->body = NULL;
+	n->category = NULL;
 	n->app_icon = NULL;
 	n->message_id = NOTIFICATION_NO_NOTIFICATION_ID;
 
@@ -232,6 +235,17 @@ void notification_set_body(Notification n, const char* body) {
 		_mem_assert(n->body = strdup(body));
 	else
 		n->body = NULL;
+}
+
+const char* NOTIFICATION_NO_CATEGORY = NULL;
+
+void notification_set_category(Notification n, const char* category) {
+	if (n->category)
+		free(n->category);
+	if (category && *category)
+		_mem_assert(n->category = strdup(category));
+	else
+		n->category = NULL;
 }
 
 static void _notification_append_hint(DBusMessageIter* subiter,
@@ -322,6 +336,10 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 		_notification_append_hint(&subiter, "urgency",
 				DBUS_TYPE_BYTE_AS_STRING, &urgency);
 	}
+	/* -> category */
+	if (n->category)
+		_notification_append_hint(&subiter, "category",
+				DBUS_TYPE_STRING_AS_STRING, &n->category);
 
 	_mem_assert(dbus_message_iter_close_container(&iter, &subiter));
 

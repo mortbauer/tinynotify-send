@@ -31,6 +31,8 @@ NOTIFICATION_NO_EXPIRE_TIMEOUT
 notification_set_expire_timeout
 NotificationUrgency
 notification_set_urgency
+NOTIFICATION_NO_CATEGORY
+notification_set_category
 notification_send
 notification_update
 notification_close
