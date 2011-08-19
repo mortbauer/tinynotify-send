@@ -24,7 +24,7 @@
  * @argv: command-line argument values
  *
  * Parse the command-line options and create a new #Notification instance
- * from them.
+ * from them (with unformatted summary & body).
  *
  * Currently, this recognizes '-i' for icon. It takes two first non-option args
  * for summary (obligatory) and body (optional). Further arguments and unknown
