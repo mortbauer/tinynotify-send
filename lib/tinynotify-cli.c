@@ -68,13 +68,17 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 	}
 
 	if (optind >= argc) {
-		/* XXX, better error handling? */
+		fputs("No summary specified.\n", stderr);
 		return NULL;
 	}
 
 	summary = argv[optind++];
 	if (optind < argc)
 		body = argv[optind++];
+	if (optind < argc) {
+		fputs("Too many arguments.\n", stderr);
+		return NULL;
+	}
 
 	n = notification_new_unformatted(summary, body);
 	if (icon)
