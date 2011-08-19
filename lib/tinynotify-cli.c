@@ -19,12 +19,12 @@ static void _handle_version(const char *version_str) {
 /* remember to keep all option-related stuff in the same order! */
 
 static const char* const _option_descs[] = {
-	"ICON", "application icon (name or path)",
-	NULL, "show help message",
+	" ICON", "application icon (name or path)",
+	", -?", "show help message",
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "i:hV";
+static const char* const _getopt_optstring = "i:h?V";
 
 static void _handle_help(const char *argv0) {
 	const char* opt;
@@ -36,9 +36,9 @@ static void _handle_help(const char *argv0) {
 
 	for (opt = _getopt_optstring, desc = _option_descs;
 			*opt; opt++, desc++) {
-		if (*opt == ':')
+		if (*opt == ':' || *opt == '?')
 			opt++; /* last will be 'V', so we don't need to recheck *opt */
-		sprintf(buf, "-%c %s", *opt, *desc ? *desc : "");
+		sprintf(buf, "-%c%s", *opt, *desc ? *desc : "");
 		fprintf(stderr, "  %-20s %s\n", buf, *(++desc));
 	}
 }
