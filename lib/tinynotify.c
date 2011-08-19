@@ -236,7 +236,7 @@ static NotifyError notification_update_va(Notification n, NotifySession s, va_li
 	dbus_int32_t expire_timeout = -1;
 
 	if (notify_session_connect(s))
-		return s->error;
+		return notify_session_get_error(s);
 
 	if (n->formatting) {
 		_mem_assert(vasprintf(&f_summary, summary, ap) != -1);
@@ -356,7 +356,7 @@ NotifyError notification_close(Notification n, NotifySession s) {
 		return _notify_session_set_error(s, NOTIFY_ERROR_NO_NOTIFICATION_ID, NULL);
 
 	if (notify_session_connect(s))
-		return s->error;
+		return notify_session_get_error(s);
 
 	_mem_assert(msg = dbus_message_new_method_call("org.freedesktop.Notifications",
 				"/org/freedesktop/Notifications",
