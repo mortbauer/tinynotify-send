@@ -48,7 +48,7 @@ static void _handle_help(const char *argv0) {
 #endif
 	const char* const* desc;
 
-	char buf[22];
+	char buf[25];
 
 	fprintf(stderr, "Usage: %s [options] summary [body]\n\n", argv0);
 
@@ -63,7 +63,7 @@ static void _handle_help(const char *argv0) {
 			opt++; /* last will be 'V', so we don't need to recheck *opt */
 		sprintf(buf, "-%c%s", *opt, *desc ? *desc : "");
 #endif
-		fprintf(stderr, "  %-20s %s\n", buf, *(++desc));
+		fprintf(stderr, "  %-24s %s\n", buf, *(++desc));
 	}
 }
 
