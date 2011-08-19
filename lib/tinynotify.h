@@ -338,9 +338,6 @@ void notification_set_app_icon(Notification notification, const char* app_icon);
  * @summary: a new summary (format string)
  *
  * Set the summary of a notification.
- *
- * Note: @summary is a printf()-style format string. When using a plain string,
- * one must ensure to escape all occurences of '%'.
  */
 void notification_set_summary(Notification notification, const char* summary);
 
@@ -350,9 +347,6 @@ void notification_set_summary(Notification notification, const char* summary);
  * @body: a new body (format string, or %NOTIFICATION_NO_BODY)
  *
  * Set (or unset) the body of a notification.
- *
- * Note: @body is a printf()-style format string. When using a plain string,
- * one must ensure to escape all occurences of '%'.
  */
 void notification_set_body(Notification notification, const char* body);
 
