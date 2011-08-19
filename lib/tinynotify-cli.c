@@ -4,8 +4,8 @@
  */
 
 #include "config.h"
-#include "tinynotify-cli.h"
 #include "tinynotify.h"
+#include "tinynotify-cli.h"
 
 #include <stdlib.h>
 #include <unistd.h>
