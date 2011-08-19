@@ -49,6 +49,9 @@
 	<example>
 		<title>Mail client using libtinynotify</title>
 		<programlisting><![CDATA[
+/* compile & link with libtinynotify.pc */
+#include <tinynotify.h>
+
 NotifySession notify_session;
 
 /* ... */
