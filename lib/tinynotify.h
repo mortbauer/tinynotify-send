@@ -7,7 +7,7 @@
 #define _TINYNOTIFY_H
 
 /**
- * SECTION: session
+ * SECTION: NotifySession
  * @short_description: API to deal with libtinynotify sessions
  * @include: tinynotify.h
  *
@@ -38,7 +38,7 @@
 typedef struct _notify_session* NotifySession;
 
 /**
- * SECTION: error
+ * SECTION: NotifyError
  * @short_description: API to deal with libtinynotify errors
  * @include: tinynotify.h
  *
@@ -210,7 +210,7 @@ extern const char* const NOTIFY_SESSION_NO_APP_ICON;
 void notify_session_set_app_icon(NotifySession session, const char* app_icon);
 
 /**
- * SECTION: notification
+ * SECTION: Notification
  * @short_description: API to deal with a single notification
  * @include: tinynotify.h
  *

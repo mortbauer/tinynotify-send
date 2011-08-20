@@ -17,9 +17,9 @@
 
 	<chapter>
 		<title>API reference</title>
-		<xi:include href="xml/session.xml"/>
-		<xi:include href="xml/error.xml"/>
-		<xi:include href="xml/notification.xml"/>
+		<xi:include href="xml/NotifySession.xml"/>
+		<xi:include href="xml/NotifyError.xml"/>
+		<xi:include href="xml/Notification.xml"/>
 		<xi:include href="xml/libtinynotify-cli.xml"/>
 	</chapter>
 
