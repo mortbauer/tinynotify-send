@@ -12,15 +12,13 @@
 #include <string.h>
 
 #include <assert.h>
-#define _mem_assert(x) _mem_check(!!(x), #x)
+#define _mem_assert(x) _mem_check(!!(x))
 
 #include <dbus/dbus.h>
 
-void _mem_check(int res, const char* stmt) {
+void _mem_check(int res) {
 	if (!res) {
-		fputs("Memory allocation failed for: ", stderr);
-		fputs(stmt, stderr);
-		fputs("\n", stderr);
+		fputs("Memory allocation failed.\n", stderr);
 		abort();
 	}
 }
