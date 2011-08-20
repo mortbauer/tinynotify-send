@@ -214,7 +214,9 @@ void notification_set_expire_timeout(Notification n, int expire_timeout) {
 	n->expire_timeout = expire_timeout;
 }
 
-void notification_set_urgency(Notification n, NotificationUrgency urgency) {
+const short int NOTIFICATION_NO_URGENCY = -1;
+
+void notification_set_urgency(Notification n, short int urgency) {
 	n->urgency = urgency;
 }
 

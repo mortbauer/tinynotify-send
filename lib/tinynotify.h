@@ -351,23 +351,25 @@ void notification_set_expire_timeout(Notification notification, int expire_timeo
 
 /**
  * NotificationUrgency
- * @NOTIFICATION_NO_URGENCY: urgency not set
  * @NOTIFICATION_URGENCY_LOW: low urgency level
  * @NOTIFICATION_URGENCY_NORMAL: normal urgency level
  * @NOTIFICATION_URGENCY_CRITICAL: critical urgency level
  *
- * A urgency level, for notification_set_urgency().
- *
- * Note that %NOTIFICATION_NO_URGENCY is not a protocol constant, the other
- * urgency levels are.
+ * Protocol-defined urgency levels, for notification_set_urgency().
  */
 
 typedef enum {
-	NOTIFICATION_NO_URGENCY = -1,
 	NOTIFICATION_URGENCY_LOW = 0,
 	NOTIFICATION_URGENCY_NORMAL = 1,
 	NOTIFICATION_URGENCY_CRITICAL = 2
 } NotificationUrgency;
+
+/**
+ * NOTIFICATION_NO_URGENCY
+ *
+ * A constant specifying that no urgency level should be set in a notifcation.
+ */
+extern const short int NOTIFICATION_NO_URGENCY;
 
 /**
  * notification_set_urgency
@@ -379,7 +381,7 @@ typedef enum {
  * If set to %NOTIFICATION_NO_URGENCY, the current urgency level would be
  * cleared.
  */
-void notification_set_urgency(Notification notification, NotificationUrgency urgency);
+void notification_set_urgency(Notification notification, short int urgency);
 
 /**
  * NOTIFICATION_NO_CATEGORY
