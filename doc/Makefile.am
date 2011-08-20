@@ -1,4 +1,4 @@
-DOC_MODULE = libtinynotify
+DOC_MODULE = libtinynotify-cli
 DOC_MODULE_VERSION = $(PACKAGE_VERSION)
 
 DOC_MAIN_SGML_FILE = $(DOC_MODULE)-docs.sgml

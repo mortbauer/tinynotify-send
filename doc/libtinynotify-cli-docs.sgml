@@ -7,20 +7,12 @@
 
 <book id="index">
 	<bookinfo>
-		<title>libtinynotify Reference Manual</title>
+		<title>libtinynotify-cli Reference Manual</title>
 	</bookinfo>
 
 	<chapter>
-		<title>Examples</title>
-		<xi:include href="example-mailclient.xml"/>
-	</chapter>
-
-	<chapter>
 		<title>API reference</title>
-		<xi:include href="xml/NotifySession.xml"/>
-		<xi:include href="xml/NotifyError.xml"/>
-		<xi:include href="xml/Notification.xml"/>
-		<xi:include href="xml/libtinynotify-cli.xml"/>
+		<xi:include href="xml/cli.xml"/>
 	</chapter>
 
 	<index id="api-index-full">

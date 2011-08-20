@@ -9,8 +9,8 @@
 #include <tinynotify.h>
 
 /**
- * SECTION: libtinynotify-cli
- * @short_description: API to create notifications from command-line args
+ * SECTION: cli
+ * @short_description: API to handle command-line arg parsing
  * @include: tinynotify-cli.h
  *
  * The libtinynotify-cli helper library provides the routines for simple
