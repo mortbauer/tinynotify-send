@@ -117,26 +117,25 @@ void notify_session_disconnect(NotifySession s) {
 	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
+static void _property_assign_str(char** prop, const char* newval) {
+	if (*prop)
+		free(*prop);
+	if (newval)
+		_mem_assert(*prop = strdup(newval));
+	else
+		*prop = NULL;
+}
+
 const char* const NOTIFY_SESSION_NO_APP_NAME = NULL;
 
 void notify_session_set_app_name(NotifySession s, const char* app_name) {
-	if (s->app_name)
-		free(s->app_name);
-	if (app_name && *app_name)
-		_mem_assert(s->app_name = strdup(app_name));
-	else
-		s->app_name = NULL;
+	_property_assign_str(&s->app_name, app_name);
 }
 
 const char* const NOTIFY_SESSION_NO_APP_ICON = NULL;
 
 void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
-	if (s->app_icon)
-		free(s->app_icon);
-	if (app_icon && *app_icon)
-		_mem_assert(s->app_icon = strdup(app_icon));
-	else
-		s->app_icon = NULL;
+	_property_assign_str(&s->app_icon, app_icon);
 }
 
 struct _notification {
@@ -197,12 +196,7 @@ const char* const NOTIFICATION_DEFAULT_APP_ICON = NULL;
 const char* const NOTIFICATION_NO_APP_ICON = "";
 
 void notification_set_app_icon(Notification n, const char* app_icon) {
-	if (n->app_icon)
-		free(n->app_icon);
-	if (app_icon)
-		_mem_assert(n->app_icon = strdup(app_icon));
-	else
-		n->app_icon = NULL;
+	_property_assign_str(&n->app_icon, app_icon);
 }
 
 const int NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT = -1;
@@ -221,12 +215,7 @@ void notification_set_urgency(Notification n, short int urgency) {
 const char* const NOTIFICATION_NO_CATEGORY = NULL;
 
 void notification_set_category(Notification n, const char* category) {
-	if (n->category)
-		free(n->category);
-	if (category && *category)
-		_mem_assert(n->category = strdup(category));
-	else
-		n->category = NULL;
+	_property_assign_str(&n->category, category);
 }
 
 static void _notification_append_hint(DBusMessageIter* subiter,
@@ -450,16 +439,10 @@ void notification_set_formatting(Notification n, int formatting) {
 }
 
 void notification_set_summary(Notification n, const char* summary) {
-	free(n->summary);
 	assert(summary);
-	_mem_assert(n->summary = strdup(summary));
+	_property_assign_str(&n->summary, summary);
 }
 
 void notification_set_body(Notification n, const char* body) {
-	if (n->body)
-		free(n->body);
-	if (body && *body)
-		_mem_assert(n->body = strdup(body));
-	else
-		n->body = NULL;
+	_property_assign_str(&n->body, body);
 }
