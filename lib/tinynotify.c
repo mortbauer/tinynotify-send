@@ -35,7 +35,7 @@ struct _notify_session {
 	char* error_details;
 };
 
-static const char* _error_messages[NOTIFY_ERROR_COUNT] = {
+static const char* const _error_messages[NOTIFY_ERROR_COUNT] = {
 	"No error",
 	"Connecting to D-Bus failed: %s",
 	"Sending message over D-Bus failed: %s",
@@ -119,7 +119,7 @@ void notify_session_disconnect(NotifySession s) {
 	_notify_session_set_error(s, NOTIFY_ERROR_NO_ERROR, NULL);
 }
 
-const char* NOTIFY_SESSION_NO_APP_NAME = NULL;
+const char* const NOTIFY_SESSION_NO_APP_NAME = NULL;
 
 void notify_session_set_app_name(NotifySession s, const char* app_name) {
 	if (s->app_name)
@@ -130,7 +130,7 @@ void notify_session_set_app_name(NotifySession s, const char* app_name) {
 		s->app_name = NULL;
 }
 
-const char* NOTIFY_SESSION_NO_APP_ICON = NULL;
+const char* const NOTIFY_SESSION_NO_APP_ICON = NULL;
 
 void notify_session_set_app_icon(NotifySession s, const char* app_icon) {
 	if (s->app_icon)
@@ -158,7 +158,7 @@ struct _notification {
 
 static const dbus_uint32_t NOTIFICATION_NO_NOTIFICATION_ID = 0;
 
-const char* NOTIFICATION_NO_BODY = NULL;
+const char* const NOTIFICATION_NO_BODY = NULL;
 
 Notification notification_new_unformatted(const char* summary, const char* body) {
 	Notification n;
@@ -195,8 +195,8 @@ void notification_free(Notification n) {
 	free(n);
 }
 
-const char* NOTIFICATION_DEFAULT_APP_ICON = NULL;
-const char* NOTIFICATION_NO_APP_ICON = "";
+const char* const NOTIFICATION_DEFAULT_APP_ICON = NULL;
+const char* const NOTIFICATION_NO_APP_ICON = "";
 
 void notification_set_app_icon(Notification n, const char* app_icon) {
 	if (n->app_icon)
@@ -220,7 +220,7 @@ void notification_set_urgency(Notification n, short int urgency) {
 	n->urgency = urgency;
 }
 
-const char* NOTIFICATION_NO_CATEGORY = NULL;
+const char* const NOTIFICATION_NO_CATEGORY = NULL;
 
 void notification_set_category(Notification n, const char* category) {
 	if (n->category)

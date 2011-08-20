@@ -175,7 +175,7 @@ NotifyError notify_session_connect(NotifySession session);
  *
  * A constant specifying that no default app name is to be specified.
  */
-extern const char* NOTIFY_SESSION_NO_APP_NAME;
+extern const char* const NOTIFY_SESSION_NO_APP_NAME;
 
 /**
  * notify_session_set_app_name
@@ -194,7 +194,7 @@ void notify_session_set_app_name(NotifySession session, const char* app_name);
  *
  * A constant specifying that no default app icon is to be specified.
  */
-extern const char* NOTIFY_SESSION_NO_APP_ICON;
+extern const char* const NOTIFY_SESSION_NO_APP_ICON;
 
 /**
  * notify_session_set_app_icon
@@ -246,7 +246,7 @@ typedef struct _notification* Notification;
  *
  * A constant specifying that the notification has no body (detailed message).
  */
-extern const char* NOTIFICATION_NO_BODY;
+extern const char* const NOTIFICATION_NO_BODY;
 
 /**
  * notification_new
@@ -297,7 +297,7 @@ void notification_free(Notification notification);
  * A constant specifying that the default app icon should be used (if specified
  * in #NotifySession).
  */
-extern const char* NOTIFICATION_DEFAULT_APP_ICON;
+extern const char* const NOTIFICATION_DEFAULT_APP_ICON;
 
 /**
  * NOTIFICATION_NO_APP_ICON
@@ -305,7 +305,7 @@ extern const char* NOTIFICATION_DEFAULT_APP_ICON;
  * A constant specifying that no app icon should ever be used (even if
  * #NotifySession specifies one).
  */
-extern const char* NOTIFICATION_NO_APP_ICON;
+extern const char* const NOTIFICATION_NO_APP_ICON;
 
 /**
  * notification_set_app_icon
@@ -388,7 +388,7 @@ void notification_set_urgency(Notification notification, short int urgency);
  *
  * A constant specifying that no category should be used.
  */
-extern const char* NOTIFICATION_NO_CATEGORY;
+extern const char* const NOTIFICATION_NO_CATEGORY;
 
 /**
  * notification_set_category
