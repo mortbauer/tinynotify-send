@@ -502,7 +502,7 @@ void notification_set_summary(Notification notification, const char* summary);
  * Set (or unset) the body of a notification.
  *
  * Note: this function shouldn't be used unless necessary. It is preferred to
- * create a new #Notification instead, or use variant (formatted) summary
+ * create a new #Notification instead, or use variant (formatted) body
  * in the constructor.
  */
 void notification_set_body(Notification notification, const char* body);
