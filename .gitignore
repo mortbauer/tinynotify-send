@@ -17,5 +17,6 @@ Makefile.in
 /libtool
 /m4/
 /stamp-h1
+/tinynotify-send
 *.la
 *.pc
