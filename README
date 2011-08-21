@@ -5,10 +5,19 @@
 Introduction
 ------------
 
-libtinynotify is an alternate implementation of the Desktop Notification
-Specification. It aims to be simple and lightweight and thus suitable for a few
-specific areas where [libnotify] [1] just doesn't fit.
+tinynotify-send is a simple CLI client for [libtinynotify][1]. It uses
+[libtinynotify-cli][2] library of common routines, and optionally
+[libtinynotify-systemwide][3] for system-wide notifications support.
 
-[1]:http://www.galago-project.org/
+This package can build a regular `tinynotify-send` binary (`--enable-regular`)
+and system-wide `sw-notify-send` (`--enable-system-wide`).
+
+The additional `--with-system-wide-exec` option can be used to specify the path
+to sw-notify-send, so the regular binary could be able to execute it when
+system-wide notifications are requested.
+
+[1]:https://github.com/mgorny/libtinynotify/
+[2]:https://github.com/mgorny/libtinynotify-cli/
+[3]:https://github.com/mgorny/libtinynotify-systemwide/
 
 <!-- vim:se syn=markdown :-->
