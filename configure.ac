@@ -28,27 +28,29 @@ AS_IF([test x"$enable_system_wide" != x"no"], [
 ])
 AM_CONDITIONAL([ENABLE_SYSTEMWIDE], [test x"$enable_system_wide" != x"no"])
 
-AC_ARG_WITH([system-wide-exec],
-	[AS_HELP_STRING([--with-system-wide-exec],
-		[Enable executing system-wide instance from regular if available (can specify a path)])])
-AS_IF([test x"$with_system_wide_exec" = x""], [
-	AS_IF([test x"$enable_system_wide" != x"no"], [
-		with_system_wide_exec=yes
-	], [
-		with_system_wide_exec=no
+AS_IF([test x"$enable_regular" != x"no"], [
+	AC_ARG_WITH([system-wide-exec],
+		[AS_HELP_STRING([--with-system-wide-exec],
+			[Enable executing system-wide instance from regular if available (can specify a path)])])
+	AS_IF([test x"$with_system_wide_exec" = x""], [
+		AS_IF([test x"$enable_system_wide" != x"no"], [
+			with_system_wide_exec=yes
+		], [
+			with_system_wide_exec=no
+		])
 	])
-])
-AS_IF([test x"$with_system_wide_exec" != x"no"], [
-	AC_CHECK_FUNC([execvp],, [
-		AC_MSG_WARN([execvp() not supported, disabling --with-system-wide-exec])
-		with_system_wide_exec=no
+	AS_IF([test x"$with_system_wide_exec" != x"no"], [
+		AC_CHECK_FUNC([execvp],, [
+			AC_MSG_WARN([execvp() not supported, disabling --with-system-wide-exec])
+			with_system_wide_exec=no
+		])
 	])
-])
-AS_IF([test x"$with_system_wide_exec" != x"no"], [
-	AS_IF([test x"$with_system_wide_exec" = x"yes"], [
-		with_system_wide_exec=sw-notify-send
+	AS_IF([test x"$with_system_wide_exec" != x"no"], [
+		AS_IF([test x"$with_system_wide_exec" = x"yes"], [
+			with_system_wide_exec=sw-notify-send
+		])
+		AC_DEFINE_UNQUOTED([SYSTEMWIDE_EXEC], ["$with_system_wide_exec"], [Define to the path to sw-notify-send if regular should try to exec it])
 	])
-	AC_DEFINE_UNQUOTED([SYSTEMWIDE_EXEC], ["$with_system_wide_exec"], [Define to the path to sw-notify-send if regular should try to exec it])
 ])
 
 AC_CONFIG_HEADER([config.h])
