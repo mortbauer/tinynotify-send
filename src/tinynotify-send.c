@@ -10,6 +10,10 @@
 
 #ifdef BUILDING_SYSTEMWIDE
 #	include <tinynotify-systemwide.h>
+#else
+#	ifdef SYSTEMWIDE_EXEC
+#		include <unistd.h>
+#	endif
 #endif
 
 #include <stdio.h>
@@ -34,6 +38,12 @@ int main(int argc, char *argv[]) {
 #ifndef BUILDING_SYSTEMWIDE
 	if (use_systemwide) {
 		notification_free(n);
+
+#	ifdef SYSTEMWIDE_EXEC
+		/* If successful, shouldn't return */
+		execvp(SYSTEMWIDE_EXEC, argv);
+#	endif
+
 		fputs("System-wide notifications not supported.\n", stderr);
 		return 1;
 	}
