@@ -31,6 +31,9 @@ int main(int argc, char *argv[]) {
 	int ret;
 
 	n = notification_new_from_cmdline(argc, argv,
+#ifdef BUILDING_SYSTEMWIDE
+			"systemwide-"
+#endif
 			PACKAGE_STRING, &use_systemwide);
 	if (!n)
 		return 1;
