@@ -26,7 +26,7 @@ AS_IF([test x"$enable_system_wide" != x"no"], [
 		enable_system_wide=no
 	])
 ])
-AM_CONDITIONAL([ENABLE_SYSTEMWIDE], [test x"$enable_systemwide" != x"no"])
+AM_CONDITIONAL([ENABLE_SYSTEMWIDE], [test x"$enable_system_wide" != x"no"])
 
 AC_ARG_WITH([system-wide-exec],
 	[AS_HELP_STRING([--with-system-wide-exec],
