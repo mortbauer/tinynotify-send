@@ -16,8 +16,11 @@ The additional `--with-system-wide-exec` option can be used to specify the path
 to sw-notify-send, so the regular binary could be able to execute it when
 system-wide notifications are requested.
 
+This project replaces old [sw-notify-send][4] project as well.
+
 [1]:https://github.com/mgorny/libtinynotify/
 [2]:https://github.com/mgorny/libtinynotify-cli/
 [3]:https://github.com/mgorny/libtinynotify-systemwide/
+[4]:https://github.com/mgorny/sw-notify-send/
 
 <!-- vim:se syn=markdown :-->
