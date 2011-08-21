@@ -23,6 +23,7 @@
  * @argc: command-line argument count
  * @argv: command-line argument values
  * @version_str: string to output on --version
+ * @use_systemwide: location to store '--system-wide' request status
  *
  * Parse the command-line options and create a new #Notification instance
  * from them (with unformatted summary & body).
@@ -32,9 +33,14 @@
  * ASAP, and if it returns %NULL, the application should terminate immediately
  * and quietly (it will handle the necessary output itself).
  *
+ * If '--system-wide' is passed, @use_systemwide will be set to a non-zero
+ * value. If '--local' is passed, @use_systemwide will be set to zero.
+ * Otherwise, @use_systemwide will be left unmodified.
+ *
  * Returns: a newly-allocated #Notification instance, or %NULL if application
  * should terminate (invalid args, --help, --version)
  */
-Notification notification_new_from_cmdline(int argc, char *argv[], const char *version_str);
+Notification notification_new_from_cmdline(int argc, char *argv[],
+		const char *version_str, int *use_systemwide);
 
 #endif

@@ -24,20 +24,24 @@ static void _handle_version(const char *version_str) {
 static const char* const _option_descs[] = {
 	" CATEGORY", "category",
 	" ICON", "application icon (name or path)",
+	NULL, "send notification on the local session bus",
 	" TIME", "expiration timeout (in ms)",
 	" LEVEL", "urgency level (0 - low, 1 - normal, 2 - critical)",
+	NULL, "send notification system-wide (to all session buses)",
 	NULL, "show help message",
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "c:i:t:u:?V";
+static const char* const _getopt_optstring = "c:i:lt:u:w?V";
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
 	{ "category", required_argument, NULL, 'c' },
 	{ "icon", required_argument, NULL, 'i' },
+	{ "local", no_argument, NULL, 'l' },
 	{ "expire-time", required_argument, NULL, 't' },
 	{ "urgency", required_argument, NULL, 'u' },
+	{ "system-wide", no_argument, NULL, 'w' },
 
 	{ "help", no_argument, NULL, '?' },
 	{ "version", no_argument, NULL, 'V' },
@@ -72,7 +76,8 @@ static void _handle_help(const char *argv0) {
 	}
 }
 
-Notification notification_new_from_cmdline(int argc, char *argv[], const char *version_str) {
+Notification notification_new_from_cmdline(int argc, char *argv[],
+		const char *version_str, int *use_systemwide) {
 	int arg;
 
 	const char *icon = NOTIFICATION_DEFAULT_APP_ICON;
@@ -97,11 +102,17 @@ Notification notification_new_from_cmdline(int argc, char *argv[], const char *v
 			case 'i':
 				icon = optarg;
 				break;
+			case 'l':
+				*use_systemwide = 0;
+				break;
 			case 't':
 				expire_timeout = atoi(optarg);
 				break;
 			case 'u':
 				urgency = atoi(optarg);
+				break;
+			case 'w':
+				*use_systemwide = 1;
 				break;
 			case 'V':
 				_handle_version(version_str);

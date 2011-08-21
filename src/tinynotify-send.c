@@ -13,11 +13,17 @@
 int main(int argc, char *argv[]) {
 	NotifySession s;
 	Notification n;
+	int use_systemwide = 0;
 
 	n = notification_new_from_cmdline(argc, argv,
-			"tinynotify-send " PACKAGE_VERSION);
+			"tinynotify-send " PACKAGE_VERSION, &use_systemwide);
 	if (!n)
 		return 1;
+	if (use_systemwide) {
+		notification_free(n);
+		fputs("System-wide notification not supported.\n", stderr);
+		return 1;
+	}
 
 	s = notify_session_new("tinynotify-send", NOTIFY_SESSION_NO_APP_ICON);
 	if (notification_send(n, s))
