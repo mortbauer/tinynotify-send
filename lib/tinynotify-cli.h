@@ -16,6 +16,10 @@
  * The libtinynotify-cli helper library provides the routines for simple
  * command-line argument parsing (using getopt()) and turning those into
  * a #Notification instance.
+ *
+ * Although libtinynotify-cli links with the actual libtinynotify itself,
+ * and uses its header, one should refer to the libtinynotify pkg-config
+ * package explicitly and include its header anyway.
  */
 
 /**
