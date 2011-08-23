@@ -17,6 +17,11 @@
  * command-line argument parsing (using getopt()) and turning those into
  * a #Notification instance.
  *
+ * To use it, simply add the necessary include to your code, and replace
+ * the notification_new() function with our notification_new_from_cmdline().
+ * The other functions work as usual, and the resulting #Notification is freed
+ * with notification_free(), as usual.
+ *
  * Although libtinynotify-cli links with the actual libtinynotify itself,
  * and uses its header, one should refer to the libtinynotify pkg-config
  * package explicitly and include its header anyway.
