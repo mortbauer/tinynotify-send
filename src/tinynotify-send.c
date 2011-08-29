@@ -20,8 +20,11 @@
 #include <stdio.h>
 
 #ifdef HAVE_NOTIFY_SESSION_DISPATCH
-static void close_noop_callback(Notification n, unsigned char reason, void* user_data) {
-}
+#	ifndef HAVE_NOTIFICATION_NOOP_ON_CLOSE
+
+static void NOTIFICATION_NOOP_ON_CLOSE(Notification n, unsigned char reason, void* user_data) {}
+
+#	endif
 #endif
 
 int main(int argc, char *argv[]) {
@@ -57,7 +60,7 @@ int main(int argc, char *argv[]) {
 
 #ifdef HAVE_NOTIFY_SESSION_DISPATCH
 	if (notify_cli_flags_get_foreground(fl))
-		notification_bind_close_callback(n, close_noop_callback, NULL);
+		notification_bind_close_callback(n, NOTIFICATION_NOOP_ON_CLOSE, NULL);
 #endif
 
 #ifdef BUILDING_SYSTEMWIDE
