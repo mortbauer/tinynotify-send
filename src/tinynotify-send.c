@@ -5,8 +5,8 @@
 
 #include "config.h"
 
-#include <tinynotify.h>
-#include <tinynotify-cli.h>
+#include "tinynotify.h"
+#include "tinynotify-cli.h"
 
 #include <stdio.h>
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 	int use_systemwide = 0;
 
 	n = notification_new_from_cmdline(argc, argv,
-			PACKAGE_STRING, &use_systemwide);
+			"tinynotify-send " PACKAGE_VERSION, &use_systemwide);
 	if (!n)
 		return 1;
 	if (use_systemwide) {
