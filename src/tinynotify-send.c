@@ -6,7 +6,7 @@
 #include "config.h"
 
 #include <tinynotify.h>
-#include <tinynotify-cli.h>
+#include "tinynotify-cli.h"
 
 #ifdef BUILDING_SYSTEMWIDE
 #	include <tinynotify-systemwide.h>
