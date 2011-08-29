@@ -28,7 +28,7 @@ int notify_cli_flags_get_foreground(NotifyCLIFlags f) {
 }
 
 static void _handle_version(const char *version_str) {
-	fprintf(stderr, "%s (libtinynotify %s)\n", version_str, PACKAGE_VERSION);
+	puts(version_str);
 }
 
 /* remember to keep all option-related stuff in the same order! */
@@ -81,7 +81,7 @@ static void _handle_help(const char *argv0) {
 
 	char buf[25];
 
-	fprintf(stderr, "Usage: %s [options] summary [body]\n\n", argv0);
+	printf("Usage: %s [options] summary [body]\n\n", argv0);
 
 #ifdef HAVE_GETOPT_LONG
 	for (opt = _getopt_longopts, desc = _option_descs;
@@ -94,8 +94,12 @@ static void _handle_help(const char *argv0) {
 			opt++; /* last will be 'V', so we don't need to recheck *opt */
 		sprintf(buf, "-%c%s", *opt, *desc ? *desc : "");
 #endif
-		fprintf(stderr, "  %-24s %s\n", buf, *(++desc));
+		printf("  %-24s %s\n", buf, *(++desc));
 	}
+
+	printf("\n"
+			"Report bugs to: https://github.com/mgorny/tinynotify-send/issues\n"
+			"Home page: https://www.github.com/mgorny/tinynotify-send/\n");
 }
 
 Notification notification_new_from_cmdline(int argc, char *argv[],

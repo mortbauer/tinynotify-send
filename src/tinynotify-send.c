@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 #endif
 			PACKAGE_STRING, &fl);
 	if (!n)
-		return 1;
+		return 0;
 
 #ifndef BUILDING_SYSTEMWIDE
 	if (notify_cli_flags_get_systemwide(fl)) {
