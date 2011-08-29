@@ -58,6 +58,18 @@ int notify_cli_flags_get_systemwide(NotifyCLIFlags flags);
 int notify_cli_flags_get_local(NotifyCLIFlags flags);
 
 /**
+ * notify_cli_flags_get_foreground
+ * @flags: flags returned by notification_new_from_cmdline()
+ *
+ * Check whether running in the foreground (waiting for notification to be
+ * closed) was requested.
+ *
+ * Returns: a non-zero value if running in the foreground was explicitly
+ * requested, zero otherwise.
+ */
+int notify_cli_flags_get_foreground(NotifyCLIFlags flags);
+
+/**
  * notification_new_from_cmdline
  * @argc: command-line argument count
  * @argv: command-line argument values

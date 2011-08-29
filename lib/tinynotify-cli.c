@@ -23,6 +23,10 @@ int notify_cli_flags_get_local(NotifyCLIFlags f) {
 	return f[0] == 'l';
 }
 
+int notify_cli_flags_get_foreground(NotifyCLIFlags f) {
+	return f[1] == 'f';
+}
+
 static void _handle_version(const char *version_str) {
 	fprintf(stderr, "%s (libtinynotify %s)\n", version_str, PACKAGE_VERSION);
 }
@@ -31,6 +35,9 @@ static void _handle_version(const char *version_str) {
 
 static const char* const _option_descs[] = {
 	" CATEGORY", "category",
+#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+	NULL, "run in foreground, wait for notification to close",
+#endif
 	" ICON", "application icon (name or path)",
 	NULL, "send notification on the local session bus",
 	" TIME", "expiration timeout (in ms)",
@@ -40,11 +47,18 @@ static const char* const _option_descs[] = {
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "c:i:lt:u:w?V";
+static const char* const _getopt_optstring = "c:"
+#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+		"f"
+#endif
+		"i:lt:u:w?V";
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
 	{ "category", required_argument, NULL, 'c' },
+#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+	{ "foreground", no_argument, NULL, 'f' },
+#endif
 	{ "icon", required_argument, NULL, 'i' },
 	{ "local", no_argument, NULL, 'l' },
 	{ "expire-time", required_argument, NULL, 't' },
@@ -107,6 +121,9 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 		switch (arg) {
 			case 'c':
 				category = optarg;
+				break;
+			case 'f':
+				flagbuf[1] = 'f';
 				break;
 			case 'i':
 				icon = optarg;

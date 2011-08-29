@@ -16,7 +16,13 @@
 #	endif
 #endif
 
+#include <stdlib.h>
 #include <stdio.h>
+
+#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+static void close_noop_callback(Notification n, unsigned char reason, void* user_data) {
+}
+#endif
 
 int main(int argc, char *argv[]) {
 	NotifySession s;
@@ -49,6 +55,11 @@ int main(int argc, char *argv[]) {
 
 	s = notify_session_new("tinynotify-send", NOTIFY_SESSION_NO_APP_ICON);
 
+#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+	if (notify_cli_flags_get_foreground(fl))
+		notification_bind_close_callback(n, close_noop_callback, NULL);
+#endif
+
 #ifdef BUILDING_SYSTEMWIDE
 	if (!notify_cli_flags_get_local(fl))
 		ret = notification_send_systemwide(n, s);
@@ -58,6 +69,11 @@ int main(int argc, char *argv[]) {
 
 	if (!ret)
 		fprintf(stderr, "%s\n", notify_session_get_error_message(s));
+#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+	else if (notify_cli_flags_get_foreground(fl)) {
+		while (!notify_session_dispatch(s, NOTIFY_SESSION_NO_TIMEOUT));
+	}
+#endif
 
 	notify_session_free(s);
 	notification_free(n);
