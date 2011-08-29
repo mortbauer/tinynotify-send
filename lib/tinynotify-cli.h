@@ -41,7 +41,7 @@ typedef const char* NotifyCLIFlags;
  *
  * Check whether a system-wide notification was requested.
  *
- * Return: a non-zero value if system-wide notification was explicitly
+ * Returns: a non-zero value if system-wide notification was explicitly
  * requested, zero otherwise.
  */
 int notify_cli_flags_get_systemwide(NotifyCLIFlags flags);
@@ -52,7 +52,7 @@ int notify_cli_flags_get_systemwide(NotifyCLIFlags flags);
  *
  * Check whether a local notification was requested.
  *
- * Return: a non-zero value if local notification was explicitly requested, zero
+ * Returns: a non-zero value if local notification was explicitly requested, zero
  * otherwise.
  */
 int notify_cli_flags_get_local(NotifyCLIFlags flags);
