@@ -15,6 +15,14 @@
 #	include <getopt.h>
 #endif
 
+int notify_cli_flags_get_systemwide(NotifyCLIFlags f) {
+	return f[0] == 'w';
+}
+
+int notify_cli_flags_get_local(NotifyCLIFlags f) {
+	return f[0] == 'l';
+}
+
 static void _handle_version(const char *version_str) {
 	fprintf(stderr, "%s (libtinynotify %s)\n", version_str, PACKAGE_VERSION);
 }
@@ -77,8 +85,9 @@ static void _handle_help(const char *argv0) {
 }
 
 Notification notification_new_from_cmdline(int argc, char *argv[],
-		const char *version_str, int *use_systemwide) {
+		const char *version_str, NotifyCLIFlags *flags) {
 	int arg;
+	static char flagbuf[3] = "  ";
 
 	const char *icon = NOTIFICATION_DEFAULT_APP_ICON;
 	const char *summary;
@@ -103,7 +112,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 				icon = optarg;
 				break;
 			case 'l':
-				*use_systemwide = 0;
+				flagbuf[0] = 'l';
 				break;
 			case 't':
 				expire_timeout = atoi(optarg);
@@ -112,7 +121,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 				urgency = atoi(optarg);
 				break;
 			case 'w':
-				*use_systemwide = 1;
+				flagbuf[0] = 'w';
 				break;
 			case 'V':
 				_handle_version(version_str);
@@ -144,5 +153,6 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 	if (category)
 		notification_set_category(n, category);
 
+	*flags = flagbuf;
 	return n;
 }

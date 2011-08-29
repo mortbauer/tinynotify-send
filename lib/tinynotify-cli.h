@@ -28,11 +28,41 @@
  */
 
 /**
+ * NotifyCLIFlags
+ *
+ * A type describing a set of additional notification flags as returned
+ * by notification_new_from_cmdline().
+ */
+typedef const char* NotifyCLIFlags;
+
+/**
+ * notify_cli_flags_get_systemwide
+ * @flags: flags returned by notification_new_from_cmdline()
+ *
+ * Check whether a system-wide notification was requested.
+ *
+ * Return: a non-zero value if system-wide notification was explicitly
+ * requested, zero otherwise.
+ */
+int notify_cli_flags_get_systemwide(NotifyCLIFlags flags);
+
+/**
+ * notify_cli_flags_get_local
+ * @flags: flags returned by notification_new_from_cmdline()
+ *
+ * Check whether a local notification was requested.
+ *
+ * Return: a non-zero value if local notification was explicitly requested, zero
+ * otherwise.
+ */
+int notify_cli_flags_get_local(NotifyCLIFlags flags);
+
+/**
  * notification_new_from_cmdline
  * @argc: command-line argument count
  * @argv: command-line argument values
  * @version_str: string to output on --version
- * @use_systemwide: location to store '--system-wide' request status
+ * @flags: location to store additional flags
  *
  * Parse the command-line options and create a new #Notification instance
  * from them (with unformatted summary & body).
@@ -42,14 +72,14 @@
  * ASAP, and if it returns %NULL, the application should terminate immediately
  * and quietly (it will handle the necessary output itself).
  *
- * If '--system-wide' is passed, @use_systemwide will be set to a non-zero
- * value. If '--local' is passed, @use_systemwide will be set to zero.
- * Otherwise, @use_systemwide will be left unmodified.
+ * The pointer at location pointed by @flags argument will be set to point
+ * to an internal buffer holding flag string. That string will contain
+ * single-letter codes for any additional flags requested by user.
  *
  * Returns: a newly-allocated #Notification instance, or %NULL if application
  * should terminate (invalid args, --help, --version)
  */
 Notification notification_new_from_cmdline(int argc, char *argv[],
-		const char *version_str, int *use_systemwide);
+		const char *version_str, NotifyCLIFlags *flags);
 
 #endif

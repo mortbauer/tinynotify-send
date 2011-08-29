@@ -1,4 +1,7 @@
 <SECTION>
 <FILE>cli</FILE>
+NotifyCLIFlags
+notify_cli_flags_get_local
+notify_cli_flags_get_systemwide
 notification_new_from_cmdline
 </SECTION>
