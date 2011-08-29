@@ -21,12 +21,7 @@
 int main(int argc, char *argv[]) {
 	NotifySession s;
 	Notification n;
-
-#ifdef BUILDING_SYSTEMWIDE
-	int use_systemwide = 1;
-#else
-	int use_systemwide = 0;
-#endif
+	NotifyCLIFlags fl;
 
 	int ret;
 
@@ -34,12 +29,12 @@ int main(int argc, char *argv[]) {
 #ifdef BUILDING_SYSTEMWIDE
 			"systemwide-"
 #endif
-			PACKAGE_STRING, &use_systemwide);
+			PACKAGE_STRING, &fl);
 	if (!n)
 		return 1;
 
 #ifndef BUILDING_SYSTEMWIDE
-	if (use_systemwide) {
+	if (notify_cli_flags_get_systemwide(fl)) {
 		notification_free(n);
 
 #	ifdef SYSTEMWIDE_EXEC
@@ -55,7 +50,7 @@ int main(int argc, char *argv[]) {
 	s = notify_session_new("tinynotify-send", NOTIFY_SESSION_NO_APP_ICON);
 
 #ifdef BUILDING_SYSTEMWIDE
-	if (use_systemwide)
+	if (!notify_cli_flags_get_local(fl))
 		ret = notification_send_systemwide(n, s);
 	else
 #endif
