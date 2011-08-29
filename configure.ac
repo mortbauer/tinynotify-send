@@ -1,5 +1,5 @@
 AC_PREREQ([2.60])
-AC_INIT([tinynotify-send], [0.2])
+AC_INIT([tinynotify-send], [1.0.0])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.6 foreign dist-bzip2 no-dependencies -Wall])
