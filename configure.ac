@@ -16,10 +16,21 @@ PKG_CHECK_MODULES([LIBTINYNOTIFY], [libtinynotify])
 CPPFLAGS="$CPPFLAGS $LIBTINYNOTIFY_CFLAGS"
 LIBS="$LIBS $LIBTINYNOTIFY_LIBS"
 
-AC_CHECK_FUNCS([getopt],, [
-	AC_MSG_ERROR([One of the required library functions was not found])
+AC_ARG_ENABLE([library],
+	[AS_HELP_STRING([--disable-library],
+		[Disable building libnotify-cli library (use if one is installed already)])])
+
+AS_IF([test x"$enable_library" != x"no"], [
+	AC_CHECK_FUNCS([getopt],, [
+		AC_MSG_ERROR([One of the required library functions was not found])
+	])
+	AC_CHECK_FUNCS([getopt_long])
+], [
+	PKG_CHECK_MODULES([LIBTINYNOTIFY_CLI], [libtinynotify-cli = $VERSION])
+	CPPFLAGS="$CPPFLAGS $LIBTINYNOTIFY_CLI_CFLAGS"
+	LIBS="$LIBS $LIBTINYNOTIFY_CLI_LIBS"
 ])
-AC_CHECK_FUNCS([getopt_long])
+AM_CONDITIONAL([ENABLE_LIBRARY], [test x"$enable_library" != x"no"])
 
 AC_ARG_ENABLE([regular],
 	[AS_HELP_STRING([--disable-regular],
