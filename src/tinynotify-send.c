@@ -19,14 +19,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef HAVE_NOTIFY_SESSION_DISPATCH
-#	ifndef HAVE_NOTIFICATION_NOOP_ON_CLOSE
-
-static void NOTIFICATION_NOOP_ON_CLOSE(Notification n, unsigned char reason, void* user_data) {}
-
-#	endif
-#endif
-
 int main(int argc, char *argv[]) {
 	NotifySession s;
 	Notification n;
@@ -58,7 +50,7 @@ int main(int argc, char *argv[]) {
 
 	s = notify_session_new("tinynotify-send", NOTIFY_SESSION_NO_APP_ICON);
 
-#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+#ifdef LIBTINYNOTIFY_HAS_EVENT_API
 	if (notify_cli_flags_get_foreground(fl))
 		notification_bind_close_callback(n, NOTIFICATION_NOOP_ON_CLOSE, NULL);
 #endif
@@ -72,7 +64,7 @@ int main(int argc, char *argv[]) {
 
 	if (!ret)
 		fprintf(stderr, "%s\n", notify_session_get_error_message(s));
-#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+#ifdef LIBTINYNOTIFY_HAS_EVENT_API
 	else if (notify_cli_flags_get_foreground(fl)) {
 		while (!notify_session_dispatch(s, NOTIFY_SESSION_NO_TIMEOUT));
 	}

@@ -16,8 +16,6 @@ PKG_CHECK_MODULES([LIBTINYNOTIFY], [libtinynotify])
 CPPFLAGS="$CPPFLAGS $LIBTINYNOTIFY_CFLAGS"
 LIBS="$LIBS $LIBTINYNOTIFY_LIBS"
 
-AC_CHECK_FUNCS([notify_session_dispatch NOTIFICATION_NOOP_ON_CLOSE])
-
 AC_ARG_ENABLE([library],
 	[AS_HELP_STRING([--disable-library],
 		[Disable building libnotify-cli library (use if one is installed already)])])

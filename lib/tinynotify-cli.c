@@ -35,7 +35,7 @@ static void _handle_version(const char *version_str) {
 
 static const char* const _option_descs[] = {
 	" CATEGORY", "category",
-#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+#ifdef LIBTINYNOTIFY_HAS_EVENT_API
 	NULL, "run in foreground, wait for notification to close",
 #endif
 	" ICON", "application icon (name or path)",
@@ -48,7 +48,7 @@ static const char* const _option_descs[] = {
 };
 
 static const char* const _getopt_optstring = "c:"
-#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+#ifdef LIBTINYNOTIFY_HAS_EVENT_API
 		"f"
 #endif
 		"i:lt:u:w?V";
@@ -56,7 +56,7 @@ static const char* const _getopt_optstring = "c:"
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
 	{ "category", required_argument, NULL, 'c' },
-#ifdef HAVE_NOTIFY_SESSION_DISPATCH
+#ifdef LIBTINYNOTIFY_HAS_EVENT_API
 	{ "foreground", no_argument, NULL, 'f' },
 #endif
 	{ "icon", required_argument, NULL, 'i' },
