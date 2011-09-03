@@ -107,14 +107,7 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 	int arg;
 	static char flagbuf[3] = "  ";
 
-	const char *icon = NOTIFICATION_DEFAULT_APP_ICON;
-	const char *summary;
-	const char *body = NOTIFICATION_NO_BODY;
-	int expire_timeout = NOTIFICATION_DEFAULT_EXPIRE_TIMEOUT;
-	NotificationUrgency urgency = NOTIFICATION_NO_URGENCY;
-	const char *category = NOTIFICATION_NO_CATEGORY;
-
-	Notification n;
+	Notification n = notification_new_unformatted("", NOTIFICATION_NO_BODY);
 
 #ifdef HAVE_GETOPT_LONG
 	while (((arg = getopt_long(argc, argv, _getopt_optstring,
@@ -124,55 +117,53 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 #endif
 		switch (arg) {
 			case 'c':
-				category = optarg;
+				notification_set_category(n, optarg);
 				break;
 			case 'f':
 				flagbuf[1] = 'f';
 				break;
 			case 'i':
-				icon = optarg;
+				notification_set_app_icon(n, optarg);
 				break;
 			case 'l':
 				flagbuf[0] = 'l';
 				break;
 			case 't':
-				expire_timeout = atoi(optarg);
+				/* XXX: strtol()? */
+				notification_set_expire_timeout(n, atoi(optarg));
 				break;
 			case 'u':
-				urgency = atoi(optarg);
+				/* XXX: strtol()? */
+				notification_set_urgency(n, atoi(optarg));
 				break;
 			case 'w':
 				flagbuf[0] = 'w';
 				break;
 			case 'V':
 				_handle_version(version_str);
+				notification_free(n);
 				return NULL;
 			case '?':
 				_handle_help(argv[0]);
+				notification_free(n);
 				return NULL;
 		}
 	}
 
 	if (optind >= argc) {
 		fputs("No summary specified.\n", stderr);
+		notification_free(n);
 		return NULL;
 	}
 
-	summary = argv[optind++];
+	notification_set_summary(n, argv[optind++]);
 	if (optind < argc)
-		body = argv[optind++];
+		notification_set_body(n, argv[optind++]);
 	if (optind < argc) {
 		fputs("Too many arguments.\n", stderr);
+		notification_free(n);
 		return NULL;
 	}
-
-	n = notification_new_unformatted(summary, body);
-	if (icon)
-		notification_set_app_icon(n, icon);
-	notification_set_expire_timeout(n, expire_timeout);
-	notification_set_urgency(n, urgency);
-	if (category)
-		notification_set_category(n, category);
 
 	*flags = flagbuf;
 	return n;
