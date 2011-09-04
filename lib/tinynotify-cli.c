@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 #ifdef HAVE_GETOPT_LONG
@@ -34,6 +35,10 @@ static void _handle_version(const char *version_str) {
 /* remember to keep all option-related stuff in the same order! */
 
 static const char* const _option_descs[] = {
+#ifdef LIBTINYNOTIFY_HAS_ACTIONS
+	" DESC:CMD", "add an action running shell command",
+	" [DESC:]CMD", "set the default action",
+#endif
 	" CATEGORY", "category",
 #ifdef LIBTINYNOTIFY_HAS_EVENT_API
 	NULL, "run in foreground, wait for notification to close",
@@ -47,7 +52,11 @@ static const char* const _option_descs[] = {
 	NULL, "output version information"
 };
 
-static const char* const _getopt_optstring = "c:"
+static const char* const _getopt_optstring =
+#ifdef LIBTINYNOTIFY_HAS_ACTIONS
+		"a:A:"
+#endif
+		"c:"
 #ifdef LIBTINYNOTIFY_HAS_EVENT_API
 		"f"
 #endif
@@ -55,6 +64,10 @@ static const char* const _getopt_optstring = "c:"
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option _getopt_longopts[] = {
+#ifdef LIBTINYNOTIFY_HAS_ACTIONS
+	{ "action", required_argument, NULL, 'a' },
+	{ "default-action", required_argument, NULL, 'A' },
+#endif
 	{ "category", required_argument, NULL, 'c' },
 #ifdef LIBTINYNOTIFY_HAS_EVENT_API
 	{ "foreground", no_argument, NULL, 'f' },
@@ -102,6 +115,14 @@ static void _handle_help(const char *argv0) {
 			"Home page: https://www.github.com/mgorny/tinynotify-send/\n");
 }
 
+#ifdef LIBTINYNOTIFY_HAS_ACTIONS
+static void _action_cb(Notification n, const char *key, void *data) {
+	const char *cmd = data;
+
+	system(cmd);
+}
+#endif
+
 Notification notification_new_from_cmdline(int argc, char *argv[],
 		const char *version_str, NotifyCLIFlags *flags) {
 	int arg;
@@ -116,6 +137,32 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 	while (((arg = getopt(argc, argv, _getopt_optstring))) != -1) {
 #endif
 		switch (arg) {
+#ifdef LIBTINYNOTIFY_HAS_ACTIONS
+			case 'a':
+			case 'A':
+				{
+					const char *sep = strchr(optarg, ':');
+					char *tmp;
+
+					if (!sep && arg == 'a') {
+						fputs("Action description needs to be separated from command by :.\n", stderr);
+						notification_free(n);
+						return NULL;
+					}
+
+					if (sep)
+						tmp = strndup(optarg, sep - optarg);
+					notification_bind_action(n,
+							arg == 'a' ? NOTIFICATION_AUTO_ACTION_KEY
+								: NOTIFICATION_DEFAULT_ACTION,
+							_action_cb,
+							(void*) (sep ? sep+1 : optarg),
+							sep ? tmp : "");
+					if (sep)
+						free(tmp);
+				}
+				break;
+#endif
 			case 'c':
 				notification_set_category(n, optarg);
 				break;
