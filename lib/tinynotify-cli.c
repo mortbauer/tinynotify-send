@@ -96,7 +96,7 @@ static void _handle_help(const char *argv0) {
 #endif
 	const char* const* desc;
 
-	char buf[25];
+	char buf[40];
 
 	printf("Usage: %s [options] summary [body]\n\n", argv0);
 
