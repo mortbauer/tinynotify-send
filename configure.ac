@@ -48,6 +48,10 @@ AS_IF([test x"$enable_system_wide" != x"no"], [
 ])
 AM_CONDITIONAL([ENABLE_SYSTEMWIDE], [test x"$enable_system_wide" != x"no"])
 
+AS_IF([test x"$enable_regular-$enable_system_wide" != x"no-no"], [
+	AC_FUNC_FORK
+])
+
 AS_IF([test x"$enable_regular" != x"no"], [
 	AC_ARG_WITH([system-wide-exec],
 		[AS_HELP_STRING([--with-system-wide-exec],

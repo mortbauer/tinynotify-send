@@ -18,7 +18,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
+
+#ifdef HAVE_WORKING_FORK
+#	include <unistd.h>
+#endif
 
 int main(int argc, char *argv[]) {
 	NotifySession s;
@@ -70,6 +73,7 @@ int main(int argc, char *argv[]) {
 		int disp;
 
 		if (notify_cli_flags_get_background(fl)) {
+#ifdef HAVE_WORKING_FORK
 			switch (fork()) {
 				case -1:
 					fprintf(stderr, "fork() failed, will run in foreground instead.\n");
@@ -79,6 +83,9 @@ int main(int argc, char *argv[]) {
 				default:
 					disp = 0;
 			}
+#else
+			fprintf(stderr, "Backgrounding not supported, will run in foreground.\n");
+#endif
 		} else
 			disp = notify_cli_flags_get_foreground(fl);
 
