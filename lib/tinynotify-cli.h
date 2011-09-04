@@ -70,6 +70,19 @@ int notify_cli_flags_get_local(NotifyCLIFlags flags);
 int notify_cli_flags_get_foreground(NotifyCLIFlags flags);
 
 /**
+ * notify_cli_flags_get_background
+ * @flags: flags returned by notification_new_from_cmdline()
+ *
+ * Check whether running in the background (waiting for notification to be
+ * closed) is necessary. This may be a case when actions are used, and running
+ * in foreground was not requested.
+ *
+ * Returns: a non-zero value if running in the background is necessary, zero
+ * otherwise.
+ */
+int notify_cli_flags_get_background(NotifyCLIFlags flags);
+
+/**
  * notification_new_from_cmdline
  * @argc: command-line argument count
  * @argv: command-line argument values

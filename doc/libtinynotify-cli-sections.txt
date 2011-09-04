@@ -4,5 +4,6 @@ NotifyCLIFlags
 notify_cli_flags_get_local
 notify_cli_flags_get_systemwide
 notify_cli_flags_get_foreground
+notify_cli_flags_get_background
 notification_new_from_cmdline
 </SECTION>

@@ -28,6 +28,10 @@ int notify_cli_flags_get_foreground(NotifyCLIFlags f) {
 	return f[1] == 'f';
 }
 
+int notify_cli_flags_get_background(NotifyCLIFlags f) {
+	return f[1] == 'b';
+}
+
 static void _handle_version(const char *version_str) {
 	puts(version_str);
 }
@@ -161,6 +165,8 @@ Notification notification_new_from_cmdline(int argc, char *argv[],
 					if (sep)
 						free(tmp);
 				}
+				if (flagbuf[1] != 'f')
+					flagbuf[1] = 'b';
 				break;
 #endif
 			case 'c':

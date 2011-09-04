@@ -18,6 +18,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[]) {
 	NotifySession s;
@@ -65,8 +66,25 @@ int main(int argc, char *argv[]) {
 	if (!ret)
 		fprintf(stderr, "%s\n", notify_session_get_error_message(s));
 #ifdef LIBTINYNOTIFY_HAS_EVENT_API
-	else if (notify_cli_flags_get_foreground(fl)) {
-		while (!notify_session_dispatch(s, NOTIFY_SESSION_NO_TIMEOUT));
+	else {
+		int disp;
+
+		if (notify_cli_flags_get_background(fl)) {
+			switch (fork()) {
+				case -1:
+					fprintf(stderr, "fork() failed, will run in foreground instead.\n");
+				case 0:
+					disp = 1;
+					break;
+				default:
+					disp = 0;
+			}
+		} else
+			disp = notify_cli_flags_get_foreground(fl);
+
+		if (disp) {
+			while (!notify_session_dispatch(s, NOTIFY_SESSION_NO_TIMEOUT));
+		}
 	}
 #endif
 
