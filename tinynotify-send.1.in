@@ -1,0 +1,81 @@
+.TH @PROGRAM@ "1" "7 IX 2011" "@PROGRAM@ @VERSION@" "User Commands"
+
+.SH NAME
+@PROGRAM@ \- manual page for @PROGRAM@ @VERSION@
+
+.SH SYNOPSIS
+.B @PROGRAM@
+[\fIoptions\fR] \fIsummary \fR[\fIbody\fR]
+
+.SH DESCRIPTION
+
+.IP "\fB\-a\fR, \fB\-\-action\fR DESC:CMD"
+
+Add an action running shell command \fICMD\fR. The command should be formatted
+as for \fIsystem(3)\fR function. \fIDESC\fR specifies the command description
+(which will be displayed by notification-daemon) and must not contain colons.
+
+This option may be specified multiple times in order to specify multiple
+actions.
+
+.IP "\fB\-A\fR, \fB\-\-default\-action\fR [DESC:]CMD"
+
+Set the default action. Syntax is similar to \fB\-\-action\fR, except for the
+fact that \fIDESC\fR is optional and this option must be specified only once.
+If \fICMD\fR contains colon, \fIDESC\fR must be specified explicitly (it can be
+empty).
+
+Note that notification-daemon may not display any description for the default
+action.
+
+.IP "\fB\-c\fR, \fB\-\-category\fR CATEGORY"
+
+Notification category hint. This could be for example \fIemail.arrived\fR or
+\fItransfer.complete\fR. For full list, see \fIDesktop Notification
+Specification.\fR
+
+.IP "\fB\-f\fR, \fB\-\-foreground\fR"
+
+Force running in the foreground and waiting for notification-daemon to close
+notification.
+
+If not specified, @PROGRAM@ will daemonize whenever necessary.
+
+.IP "\fB\-i\fR, \fB\-\-icon\fR ICON"
+
+Application icon. This could be either an URI (with \fIfile://\fR schema)
+or a name in a freedesktop.org-compliant icon theme.
+
+.IP "\fB\-l\fR, \fB\-\-local\fR"
+
+Send notification on the local session bus. This is the default in
+\fItinynotify-send\fR.
+
+.IP "\fB\-t\fR, \fB\-\-expire\-time\fR TIME"
+
+Notification expiration timeout (in ms). If not specified, server-defined
+default will be used. If \fI0\fR, notification does not expire.
+
+.IP "\fB\-u\fR, \fB\-\-urgency\fR LEVEL"
+
+Urgency level for the notification (0 \- low, 1 \- normal, 2 \- critical).
+
+.IP "\fB\-w\fR, \fB\-\-system\-wide\fR"
+
+Send the notification system\-wide. This involves searching for all running
+session buses, and sending the notification to all of them and thus requires
+raised privileges. Default in \fIsw-notify-send\fR.
+
+.IP "\-?, \fB\-\-help\fR"
+
+Output short help.
+
+.IP "\fB\-V\fR, \fB\-\-version\fR"
+
+Output version information.
+
+.SH AUTHOR
+Michal Gorny <mgorny@gentoo.org>
+
+.SH "REPORTING BUGS"
+Report bugs to: https://github.com/mgorny/tinynotify\-send/issues
