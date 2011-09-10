@@ -37,7 +37,7 @@ tinynotify-send.1: tinynotify-send.1.in
 	$(SED) \
 		-e "s|@PROGRAM[@]|tinynotify-send|g" \
 		-e "s|@VERSION[@]|@VERSION@|g" \
-		"${srcdir}"/$< > $@.tmp
+		$< > $@.tmp
 	chmod a-w $@.tmp
 	mv $@.tmp $@
 endif
@@ -60,7 +60,7 @@ sw-notify-send.1: tinynotify-send.1.in
 	$(SED) \
 		-e "s|@PROGRAM[@]|sw-notify-send|g" \
 		-e "s|@VERSION[@]|@VERSION@|g" \
-		"${srcdir}"/$< > $@.tmp
+		$< > $@.tmp
 	chmod a-w $@.tmp
 	mv $@.tmp $@
 endif
