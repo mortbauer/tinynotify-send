@@ -23,7 +23,7 @@ dist_man1_MANS =
 
 if ENABLE_REGULAR
 bin_PROGRAMS += tinynotify-send
-dist_man1_MANS += tinynotify-send.1
+
 DISTCLEANFILES += tinynotify-send.1
 
 if ENABLE_LIBRARY
@@ -64,3 +64,9 @@ sw-notify-send.1: tinynotify-send.1.in
 	chmod a-w $@.tmp
 	mv $@.tmp $@
 endif
+
+EXTRA_DIST += NEWS
+NEWS: configure.ac Makefile.am
+	git for-each-ref refs/tags --sort '-*committerdate' \
+		--format '# %(tag) (%(*committerdate:short))%0a%(contents:body)' \
+		> NEWS
