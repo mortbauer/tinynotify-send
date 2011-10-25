@@ -79,5 +79,5 @@ AS_IF([test x"$enable_regular" != x"no"], [
 ])
 
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_FILES([Makefile doc/Makefile libtinynotify-cli.pc])
+AC_CONFIG_FILES([Makefile libtinynotify-cli.pc])
 AC_OUTPUT

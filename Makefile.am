@@ -1,10 +1,8 @@
 ACLOCAL_AMFLAGS = -I m4
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 EXTRA_DIST = tinynotify-send.1.in
 DISTCLEANFILES =
 
 if ENABLE_LIBRARY
-SUBDIRS = doc
 
 pkgconfigdir = $(libdir)/pkgconfig
 
